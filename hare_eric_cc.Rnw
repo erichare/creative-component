@@ -58,11 +58,14 @@ The centerpiece of discreteRV is a set of functions to create and manipulate dis
 make.RV(vals = 1:6, probs = rep("1/6", times = 6))
 @
 
-\subsubsection{Simuation}
+\subsubsection{Simulation}
 
 \subsection{peptider}
-\subsubsection{Overview}
-\subsubsection{Library Properties}
+\subsubsection{Expected Coverage}
+\subsubsection{Relative Efficiency}
+\subsubsection{Functional Diversity}
+\subsubsection{Peptide Inclusion}
+\subsubsection{Neighborhoods}
 \subsubsection{Custom Schemes}
 
 \section{Frontend}
