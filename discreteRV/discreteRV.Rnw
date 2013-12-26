@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage{graphicx, hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage[backend=bibtex, natbib=true]{biblatex}
+\newtheorem{rexample}{R Example}[section]
+\addbibresource{references.bib}
+
+\setlength{\parskip}{3ex}
+\setlength{\parindent}{0pt}
+
+\title{Manipulation of Discrete Random Variables with discreteRV}
+\author{Eric Riemer Hare}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+<<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
+    #library(devtools)
+
+    #install_github("discreteRV", "erichare")
+
+    library(discreteRV)
+@
+
+\section{Introduction}
+
+Dr. Andreas Buja, professor of Statistics at the University of Pennsylvania, created a set of R functions implementing discrete random variables[REF].  These functions were compiled and documented in a package called discreteRV.  discreteRV is available for download on the Comprehensive R Archive Network (CRAN)[REF].
+
+The functions of discreteRV are organized into two logical areas, termed probabilities and simulations.
+
+\section{Probabilities}
+The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables.  A list of these functions and brief discriptions of their functionality is available in table \ref{tbl:discreteRV-probs}.  A random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
+
+<<makeRV, rexample = TRUE>>=
+make.RV(vals = 1:6, probs = rep("1/6", times = 6))
+@
+
+\begin{table}[!h]
+\centering
+\scalebox{0.95}{
+\begin{tabular}{ccc}\hline
+Name & Arguments & Description \\
+\end{tabular}}
+\caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV. }
+\end{table}
+
+The syntactic structure of the included functions lends itself both to a natural presentation in an introductory probability course, as well as more advanced modeling of discrete random variables. The object is constructed by setting a standard R vector object to the possible values that the random variable can take (the sample space). It is preferred, though not required, that these be encoded as integers, since this allows for expected values, variances, and other measures of distributional tendency to be computed. This vector of outcomes is then named by the respective probability of each outcome. The probability can be encoded as a string, such as ``1/6", if this aids in readability, but the string must be coercable to a numeric.
+
+The choice to encode the probabilities in the names of the vector may seem counterintuitive. However, it is this choice which allows for the familiar syntax employed by introductory statistics courses and textbooks to be seamlessly replicated. Consider, for instance, an RV object ``X'' which we will use to represent a single roll of a fair die.
+
+<<fairdie>>=
+X <- make.RV(1:6, rep("1/6", 6))
+X
+@
+
+Note that although the print method does not illustrate the inherent structure of the object, the probabilities (1/6, for each of the 6 outcomes of the die roll) are actually stored in the names of the object ``X".
+
+<<fairdienames>>=
+names(X)
+@
+
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {\it P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as {\it P(X > 5 | X == 1)}.
+
+Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the {\it multN} function to compute the probability mass function of n trials of X.
+
+<<fairdiemult, results='asis'>>=
+library(xtable)
+
+XX <- multN(X, fractions = TRUE)
+xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX))))
+@
+
+\section{Simulation}
+
+\section{Conclusion}
+
+\end{document}

@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{graphicx, hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage[backend=bibtex, natbib=true]{biblatex}
+\newtheorem{rexample}{R Example}[section]
+\addbibresource{references.bib}
+
+\setlength{\parskip}{3ex}
+\setlength{\parindent}{0pt}
+
+\title{Analyzing Peptide Libraries with peptider}
+\author{Eric Riemer Hare}
+
+\begin{document}
+
+\maketitle
+\clearpage
+
+<<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
+    library(peptider)
+@
+
+\section{Introduction}
+
+\section{Library Diversity}
+
+\subsection{Expected Coverage}
+\subsection{Relative Efficiency}
+\subsection{Functional Diversity}
+
+\section{Peptide Coverage}
+
+\subsection{Peptide Inclusion}
+\subsection{Neighborhoods}
+
+\section{Custom Schemes}
+
+\section{Conclusion}
+
+\end{document}

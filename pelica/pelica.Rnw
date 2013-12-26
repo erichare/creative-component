@@ -8,7 +8,7 @@
 \setlength{\parskip}{3ex}
 \setlength{\parindent}{0pt}
 
-\title{A Framework and Application for Efficient Analysis of Peptide Libraries}
+\title{A Web Application for Efficient Analysis of Peptide Libraries}
 \author{Eric Riemer Hare}
 
 \begin{document}
@@ -16,8 +16,19 @@
 \maketitle
 \clearpage
 
-<<concordance, echo=FALSE>>=
-opts_knit$set(self.contained=FALSE)
+<<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
+    library(peptider)
+    library(shiny)
 @
+
+\section{Introduction}
+
+\section{Shiny}
+
+\section{User Interface}
+
+\section{Features}
+
+\section{Conclusion}
 
 \end{document}
