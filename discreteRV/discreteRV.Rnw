@@ -12,6 +12,10 @@
 \author{Eric Riemer Hare}
 
 \begin{document}
+<<concordance, echo=FALSE>>=
+opts_chunk$set(concordance=TRUE, fig.align = "center", fig.pos = 'H', fig.show='hold', echo = FALSE)
+opts_knit$set(self.contained=FALSE)
+@
 
 \maketitle
 \clearpage
@@ -31,11 +35,15 @@ Dr. Andreas Buja, professor of Statistics at the University of Pennsylvania, cre
 The functions of discreteRV are organized into two logical areas, termed probabilities and simulations.
 
 \section{Probabilities}
-The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables.  A list of these functions and brief discriptions of their functionality is available in table \ref{tbl:discreteRV-probs}.  A random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
 
-<<makeRV, rexample = TRUE>>=
+\subsection{Creation}
+The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. In discreteRV, a random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
+
+<<makeRV, rexample = TRUE, echo=TRUE>>=
 make.RV(vals = 1:6, probs = rep("1/6", times = 6))
 @
+
+discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in table \ref{tbl:discreteRV-probs}.
 
 \begin{table}[!h]
 \centering
@@ -46,30 +54,74 @@ Name & Arguments & Description \\
 \caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV. }
 \end{table}
 
+\subsection{Structure}
+
 The syntactic structure of the included functions lends itself both to a natural presentation in an introductory probability course, as well as more advanced modeling of discrete random variables. The object is constructed by setting a standard R vector object to the possible values that the random variable can take (the sample space). It is preferred, though not required, that these be encoded as integers, since this allows for expected values, variances, and other measures of distributional tendency to be computed. This vector of outcomes is then named by the respective probability of each outcome. The probability can be encoded as a string, such as ``1/6", if this aids in readability, but the string must be coercable to a numeric.
 
 The choice to encode the probabilities in the names of the vector may seem counterintuitive. However, it is this choice which allows for the familiar syntax employed by introductory statistics courses and textbooks to be seamlessly replicated. Consider, for instance, an RV object ``X'' which we will use to represent a single roll of a fair die.
 
-<<fairdie>>=
+<<fairdie, echo=TRUE>>=
 X <- make.RV(1:6, rep("1/6", 6))
 X
 @
 
 Note that although the print method does not illustrate the inherent structure of the object, the probabilities (1/6, for each of the 6 outcomes of the die roll) are actually stored in the names of the object ``X".
 
-<<fairdienames>>=
+<<fairdienames, echo=TRUE>>=
 names(X)
 @
 
+\subsection{Probabilities}
+
 By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {\it P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as {\it P(X > 5 | X == 1)}.
 
-Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the {\it multN} function to compute the probability mass function of n trials of X.
+Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the ``E'' function. To compute the expected value for a single roll of a fair die, we run the code {\it E(X)}.
+
+\subsection{Joint Distributions}
+
+Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the {\it multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for n = 2, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for n = 3. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
 
 <<fairdiemult, results='asis'>>=
 library(xtable)
 
-XX <- multN(X, fractions = TRUE)
-xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX))))
+XX <- multN(X)
+print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+@
+
+<<fairdiemult3, results='asis'>>=
+library(xtable)
+
+XX <- multN(X, n = 3)
+print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+@
+
+discreteRV also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the {\it SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, {\it SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
+
+<<fairdiesofi, results='asis'>>=
+X2 <- SofIID(X, n = 2)
+print(xtable(t(data.frame(Outcome = as.character(X2), Probability = names(X2))), label = "tbl:fairdiesofi", caption = "Outcomes and their associated Probabilities for a variable representing the sum of two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+@
+
+\subsection{Plotting}
+discreteRV includes a {\it plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling {\it plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 100 independent rolls of a die is given in Figure \ref{fig:plot100}.
+
+<<plot1, fig.cap='Plot method called on a fair die random variable.'>>=
+plot(X)
+@
+
+<<plot2, fig.cap='Plot method called on a sum of two fair die random variable.'>>=
+plot(X2)
+@
+
+<<plot100, fig.cap='Plot method called on a sum of 100 fair die random variable.', cache=TRUE>>=
+X100 <- SofIID(X, n = 100)
+plot(X100)
+@
+
+In addition to a plotting method, there is also a method for {\it qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}.
+
+<<qqplot, fig.cap='qqnorm method called on a sum of 100 fair die random variable.'>>=
+qqnorm(X100)        
 @
 
 \section{Simulation}
