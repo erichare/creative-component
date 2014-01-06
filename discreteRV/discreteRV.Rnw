@@ -104,21 +104,21 @@ Aside from moments and probability statements, discreteRV includes a powerful se
 <<fairdiemult, echo=FALSE, results='asis'>>=
 library(xtable)
 
-XX <- multN(X)
+XX <- multN(X, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
 <<fairdiemult3, echo=FALSE, results='asis'>>=
 library(xtable)
 
-XX <- multN(X, n = 3)
+XX <- multN(X, n = 3, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
 discreteRV also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the {\it SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, {\it SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
 
 <<fairdiesofi, echo=FALSE, results='asis'>>=
-X2 <- SofIID(X, n = 2)
+X2 <- SofIID(X, n = 2, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(X2), Probability = names(X2))), label = "tbl:fairdiesofi", caption = "Outcomes and their associated Probabilities for a variable representing the sum of two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
