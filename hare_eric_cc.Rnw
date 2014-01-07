@@ -1,9 +1,7 @@
 \documentclass{article}
-\usepackage{graphicx, hyperref}
 \usepackage[margin=1in]{geometry}
-\usepackage[backend=bibtex, natbib=true]{biblatex}
-\newtheorem{rexample}{R Example}[section]
-\addbibresource{references.bib}
+\usepackage{pdfpages}
+\usepackage{float}
 
 \setlength{\parskip}{3ex}
 \setlength{\parindent}{0pt}
@@ -14,10 +12,22 @@
 \begin{document}
 
 \maketitle
-\clearpage
 
 <<concordance, echo=FALSE>>=
 opts_knit$set(self.contained=FALSE)
 @
+
+My creative component consists of three separate papers, each covering a different component of the overall project I worked on. The layering of the three components is illustrated in Figure \ref{layers}. The structure of this document is organized in the same manner, beginning with discreteRV, continuing with peptider, and ending with PeLiCa.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{figure/CC_Drawing_1}
+  \caption{The three components, or layers, of my project.}
+  \label{layers}
+\end{figure}
+
+\includepdf[pages={-}]{discreteRV/discreteRV.pdf}
+\includepdf[pages={-}]{peptider/peptider.pdf}
+\includepdf[pages={-}]{pelica/pelica.pdf}
 
 \end{document}
