@@ -131,8 +131,28 @@ qplot(detect(my_lib, 10^7), weight = di, geom = "histogram", data = my_lib$data)
 @
 
 \subsection{Neighborhoods}
+A related concern to inclusion of a particular peptide is inclusion of a peptide's ``neighbors". A degree-n neighbor of a peptide p is any peptide that differs by at most n amino acids from p. For example, the length 7 peptide HENNING includes degree-1 neighbor QENNING as well as HQNNING, and a degree-2 neighbor YENNLNG. Peptider includes a function for working with neighborhoods, {\it getNeighbors}, which accepts a peptide sequence as a character vector and returns all degree-1 neighbors.
 
-\section{Speed Improvements}
+<<getneighbors>>=
+getNeighbors("HENNING")
+@
+
+Although there is no built-in function for computing degree-2 and greater neighborhoods for a given peptide, the functionality can be emulated by successive calling of getNeighbors, i.e.,
+
+<<getneighbors2>>=
+unique(unlist(getNeighbors(getNeighbors("HENNING"))))
+@
+
+\section{Further Work}
+Although these functions are suitable for working with peptides up to about length ten, they become slower and more problematic for larger peptides. Work has progressed on a new suite of functions which simplify the encoding of peptides. By recognizing the assumption of independence of each amino acid, we can store counts of each peptide class in order to avoid storing all possible permutations of peptide classes. This greatly simplifies the computation time and allows for peptides of length 20 and beyond to be analyzed in the context of peptide libraries.
+
+Replacement functions for most of the previously described functionality using this new encoding scheme is available unexported in peptider. For instance, to compute the coverage of a size $10^25$ NNK library with peptides of length 18, one can call:
+
+<<makowski_new>>=
+peptider:::coverage_new(18, "NNK", N = 10^25)
+@
+
+Functions for coverage, efficiency, diversity, and inclusion probabilities have all been written and have the ``new" suffix.
 
 \section{Conclusion}
 
