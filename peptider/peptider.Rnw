@@ -24,6 +24,7 @@ opts_knit$set(self.contained=FALSE)
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
     library(peptider)
+    library(ggplot2)
 @
 
 \section{Introduction}
@@ -74,11 +75,61 @@ makowski(6, "NNK")
 @
 
 \subsection{Expected Coverage}
+The expected coverage of the library is directly related to the diversity of the library. It is the percentage of all possible peptides that the library contains. Letting $c$ represent the number of viable amino acids in the library scheme, the expected coverage is:
+
+\begin{align*}
+C(N, k) = D(N, k)/c^k
+\end{align*}
+
+Note that the diversity of the library can range between 0 (for a library with no peptides) and $c^k$ (wherein the library includes every possible peptide). Hence, the coverage must range from 0 to 1. Peptider includes a function to compute the coverage, which again takes the peptide length and library scheme as parameters. It also accepts a parameter N representing the overall number of peptides in the library.
+
+<<coverage>>=
+coverage(6, "NNK", N = 10^8)
+@
+
 \subsection{Relative Efficiency}
+In general, it is desireable to achieve a coverage as close as possible to one if we'd like the library to contain all possible peptides. One can achieve this with arbitrarily high probability by increasing the library size (N). However, doing so can drastically increase the cost of the library and may not always be possible. Ideally, the library should contain as high as possible diversity with as small as possible size. Relative Efficiency is a measure to quantify this, and is defined as:
+
+\begin{align*}
+R(N, k) = D(N, k)/N
+\end{align*}
+
+As N increases, the relative efficiency subsequently decreases. An ideal peptide library from a cost-benefit perspective would contain both a high diversity (and hence high expected coverage) and still a high relative effeciency. Efficiency can be computed with peptider in the same way as coverage.
+
+<<efficiency>>=
+efficiency(6, "NNK", N = 10^8)
+@
 
 \section{Peptide Coverage}
+The measures of library diversity included in peptider introduced to this point are useful to broadly assess the library performance. However, applications of peptide libraries often require knowledge of the probability of observing particular peptides in the library[REF].
 
 \subsection{Peptide Inclusion}
+The peptide inclusion probability is the probability of obtaining at least one instance of a particular peptide in the library. If X is defined as a random variable representing the number of occurrences of this peptide, the probability is
+
+\begin{align*}
+P(X \ge 1) = 1 - P(X = 0) \approx 1 - e^{-N\sum_ip_i}
+\end{align*}
+
+$p_i$ again is the probability of peptide class i. Because of the dependence on the peptide class, this inclusion probability will vary depending on the particular peptide of interest, and the library scheme. The {\it ppeptide} function in peptider allows computation of the probability. It accepts a peptide sequence as a character vector, the library scheme, and the library size.
+
+<<inclusion>>=
+ppeptide("HENNING", "NNK", N = 10^10)
+@
+
+We may also be interested in the range of inclusion probabilities for all peptides rather than just a particular sequence. In this case, the {\it detect} function is useful. detect differs a bit syntactically as it requires the created library to be passed in as an argument. For an NNK library with peptide lengths 6 and library size $10^7$, we have:
+
+<<detect>>=
+my_lib <- libscheme("NNK", 6)
+
+summary(detect(my_lib, 10^7))
+@
+
+<<detectplot>>=
+qplot(detect(my_lib, 10^7), weight = di, geom = "histogram", data = my_lib$data) +
+    xlab("Inclusion Probability") +
+    ylab("Count")
+@
+
 \subsection{Neighborhoods}
 
 \section{Speed Improvements}
