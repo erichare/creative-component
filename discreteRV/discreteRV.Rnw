@@ -81,7 +81,7 @@ SofIID & Sum of independent identically distributed random variables \\
 V & Variance of a random variable \\
 \hline
 \end{tabular}}
-\caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV. }
+\caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV. \hh{Sort by functionality rather than alphabetically}}
 \end{table}
 
 \subsection{Creation}
@@ -89,7 +89,7 @@ The centerpiece of discreteRV is a set of functions to create and manipulate dis
 \hh{and now the math notation for that :)}
 
 In discreteRV, a random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
-Consider, for instance, an RV object ``X'' which we will use to represent a single roll of a fair die.
+Consider, for instance, an RV object \code{X} which we will use to represent a single roll of a fair die.
 
 <<makeRV, rexample = TRUE>>=
 X <- make.RV(vals = 1:6, probs = rep("1/6", times = 6))
@@ -98,7 +98,7 @@ X
 
 \subsection{Structure}
 
-The syntactic structure of the included functions lends itself both to a natural presentation in an introductory probability course, as well as more advanced modeling of discrete random variables. The object is constructed by setting a standard R vector object to the possible values that the random variable can take (the sample space). It is preferred, though not required, that these be encoded as integers, since this allows for expected values, variances, and other measures of distributional tendency to be computed. This vector of outcomes is then named by the respective probability of each outcome. The probability can be encoded as a string, such as ``1/6", if this aids in readability, but the string must be coercable to a numeric.
+The syntactic structure of the included functions lends itself both to a natural presentation in an introductory probability course, as well as more advanced modeling of discrete random variables. The object is constructed by setting a standard R vector object to the possible values that the random variable can take (the sample space). It is preferred, though not required, that these be encoded as integers, since this allows to compute expected values, variances, and other distributional properties. This vector of outcomes is then named by the respective probability of each outcome. The probability can be encoded as a string, such as ``1/6", if this aids in readability, but the string must be coercable to a numeric.
 
 The choice to encode the probabilities in the names of the vector may seem counterintuitive. However, it is this choice which allows for the familiar syntax employed by introductory statistics courses and textbooks to be seamlessly replicated. 
 
@@ -118,7 +118,7 @@ Several other distributional quantities are computable, including the expected v
 
 \subsection{Joint Distributions}
 
-Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the {\it multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for n = 2, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for n = 3. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
+Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the {\it multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
 
 <<fairdiemult, echo=FALSE, results='asis'>>=
 library(xtable)
