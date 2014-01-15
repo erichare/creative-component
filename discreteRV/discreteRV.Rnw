@@ -5,6 +5,8 @@
 \usepackage{amsmath,amssymb,array}
 \usepackage{booktabs}
 
+\newcommand{\hh}[1]{{\color{magenta} #1}} 
+
 %% load any required packages here
 
 \begin{document}
@@ -20,7 +22,7 @@
 \begin{article}
 
 \title{Manipulation of Discrete Random Variables with discreteRV}
-\author{by Eric Riemer Hare}
+\author{by Eric Riemer Hare, Andreas Buja, and Heike Hofmann}
 
 \maketitle
 
@@ -43,9 +45,12 @@ opts_knit$set(self.contained=FALSE)
 
 \section{Introduction}
 
-Dr. Andreas Buja, professor of Statistics at the University of Pennsylvania, created a set of R functions implementing discrete random variables[REF].  These functions were compiled and documented in a package called discreteRV.  discreteRV is available for download on the Comprehensive R Archive Network (CRAN)[REF].
+%Dr. Andreas Buja, professor of Statistics at the University of Pennsylvania, created a set of R functions implementing discrete random variables[REF]. 
+\hh{What is the idea behind discreteRV? - something like: one of the big hurdles in teaching probability in an undergraduating setting is the missing link between theoretical statements in books and lectures and the notation used in statistical software required in more and more classes. }
 
-The functions of discreteRV are organized into two logical areas, termed probabilities and simulations.
+These functions were compiled and documented in a package called \pkg{discreteRV}.  \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN)[REF].
+
+The functions of \pkg{discreteRV} are organized into two logical areas, termed probabilities and simulations.
 
 \section{Probabilities}
 
@@ -57,7 +62,7 @@ discreteRV includes a suite of functions to create, manipulate, and compute dist
 \begin{tabular}{lp{0.8\textwidth}}\hline
 Name & Description \\ 
 \hline
-as.RV & Turn a probability vector with possible outcome values in the names() attribute into a random variable \\
+\code{as.RV} & Turn a probability vector with possible outcome values in the names() attribute into a random variable \\
 E & Expected value of a random variable \\
 KURT & Kurtosis of a random variable \\
 make.RV & Make a random variable consisting of possible outcome values and their probabilities or odds \\
@@ -80,7 +85,10 @@ V & Variance of a random variable \\
 \end{table}
 
 \subsection{Creation}
-The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. In discreteRV, a random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
+The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. 
+\hh{and now the math notation for that :)}
+
+In discreteRV, a random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
 Consider, for instance, an RV object ``X'' which we will use to represent a single roll of a fair die.
 
 <<makeRV, rexample = TRUE>>=
@@ -102,9 +110,11 @@ names(X)
 
 \subsection{Probabilities}
 
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {\it P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as {\it P(X > 5 | X == 1)}.
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \mod X = 1)$.
 
-Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the ``E'' function. To compute the expected value for a single roll of a fair die, we run the code {\it E(X)}.
+\hh{A side by side table of mathematical statements and code counterparts would be good to highlight the similarities}
+
+Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}.
 
 \subsection{Joint Distributions}
 
