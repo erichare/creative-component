@@ -1,32 +1,44 @@
-\documentclass{article}
-\usepackage{graphicx, hyperref}
-\usepackage[margin=1in]{geometry}
-\usepackage[backend=bibtex, natbib=true]{biblatex}
-\usepackage{float}    % for fig.pos='H'
-\newtheorem{rexample}{R Example}[section]
-\addbibresource{references.bib}
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{RJournal}
+\usepackage{amsmath,amssymb,array}
+\usepackage{booktabs}
 
-\setlength{\parskip}{3ex}
-\setlength{\parindent}{0pt}
-
-\title{Manipulation of Discrete Random Variables with discreteRV}
-\author{Eric Riemer Hare}
+%% load any required packages here
 
 \begin{document}
+
+%% do not edit, for illustration only
+\sectionhead{Contributed research article}
+\volume{XX}
+\volnumber{YY}
+\year{2014}
+\month{AAAA}
+
+%% replace RJtemplate with your article
+\begin{article}
+
+\title{Manipulation of Discrete Random Variables with discreteRV}
+\author{by Eric Riemer Hare}
+
+\maketitle
+
+\abstract{
+This is where the abstract goes}
+
 <<concordance, echo=FALSE>>=
 opts_chunk$set(concordance=TRUE)
 opts_knit$set(self.contained=FALSE)
 @
 
-\maketitle
-\clearpage
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
     #library(devtools)
 
     #install_github("discreteRV", "erichare")
 
-    library(discreteRV)
+    suppressWarnings(library(discreteRV))
 @
 
 \section{Introduction}
@@ -42,7 +54,7 @@ discreteRV includes a suite of functions to create, manipulate, and compute dist
 \begin{table}[!h]
 \centering
 \scalebox{0.95}{
-\begin{tabular}{ll}\hline
+\begin{tabular}{lp{0.8\textwidth}}\hline
 Name & Description \\ 
 \hline
 as.RV & Turn a probability vector with possible outcome values in the names() attribute into a random variable \\
@@ -69,21 +81,18 @@ V & Variance of a random variable \\
 
 \subsection{Creation}
 The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. In discreteRV, a random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
+Consider, for instance, an RV object ``X'' which we will use to represent a single roll of a fair die.
 
 <<makeRV, rexample = TRUE>>=
-make.RV(vals = 1:6, probs = rep("1/6", times = 6))
+X <- make.RV(vals = 1:6, probs = rep("1/6", times = 6))
+X
 @
 
 \subsection{Structure}
 
 The syntactic structure of the included functions lends itself both to a natural presentation in an introductory probability course, as well as more advanced modeling of discrete random variables. The object is constructed by setting a standard R vector object to the possible values that the random variable can take (the sample space). It is preferred, though not required, that these be encoded as integers, since this allows for expected values, variances, and other measures of distributional tendency to be computed. This vector of outcomes is then named by the respective probability of each outcome. The probability can be encoded as a string, such as ``1/6", if this aids in readability, but the string must be coercable to a numeric.
 
-The choice to encode the probabilities in the names of the vector may seem counterintuitive. However, it is this choice which allows for the familiar syntax employed by introductory statistics courses and textbooks to be seamlessly replicated. Consider, for instance, an RV object ``X'' which we will use to represent a single roll of a fair die.
-
-<<fairdie>>=
-X <- make.RV(1:6, rep("1/6", 6))
-X
-@
+The choice to encode the probabilities in the names of the vector may seem counterintuitive. However, it is this choice which allows for the familiar syntax employed by introductory statistics courses and textbooks to be seamlessly replicated. 
 
 Note that although the print method does not illustrate the inherent structure of the object, the probabilities (1/6, for each of the 6 outcomes of the die roll) are actually stored in the names of the object ``X".
 
@@ -187,5 +196,7 @@ Prop(X.sim > 3)
 
 \section{Conclusion}
 The power of discreteRV is truly in its simplicity. Because it uses familiar introductory probability syntax, it can allow students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, discreteRV also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
+
+\end{article}
 
 \end{document}
