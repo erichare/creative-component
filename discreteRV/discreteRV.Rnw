@@ -84,11 +84,11 @@ V & Variance of a random variable \\
 \caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV. \hh{Sort by functionality rather than alphabetically}}
 \end{table}
 
-\subsection{Creation}
-The centerpiece of discreteRV is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. 
-\hh{and now the math notation for that :)}
+\subsection{Creating random variables}
+The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. 
+\hh{isn't that strictly speaking a probability mass function? - I think it would be good to walk through the math and the computational expressions side by side - so rather than the table, it might be better to follow Andreas' example on his website and write out the mathematical statements as well. }
 
-In discreteRV, a random variable is defined through the use of the make.RV function.  make.RV accepts a vector of probabilities and a vector of outcome values, and returns an RV object.
+In \pkg{discreteRV}, a random variable is defined through the use of the \code{make.RV} function.  \code{make.RV} accepts a vector of probabilities and a vector of outcome values, and returns an \code{RV} object.
 Consider, for instance, an RV object \code{X} which we will use to represent a single roll of a fair die.
 
 <<makeRV, rexample = TRUE>>=
@@ -102,7 +102,7 @@ The syntactic structure of the included functions lends itself both to a natural
 
 The choice to encode the probabilities in the names of the vector may seem counterintuitive. However, it is this choice which allows for the familiar syntax employed by introductory statistics courses and textbooks to be seamlessly replicated. 
 
-Note that although the print method does not illustrate the inherent structure of the object, the probabilities (1/6, for each of the 6 outcomes of the die roll) are actually stored in the names of the object ``X".
+Note that although the print method does not illustrate the inherent structure of the object, the probabilities (1/6, for each of the 6 outcomes of the die roll) are actually stored in the names of the object \code{X}.
 
 <<fairdienames>>=
 names(X)
@@ -110,9 +110,7 @@ names(X)
 
 \subsection{Probabilities}
 
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \mod X = 1)$.
-
-\hh{A side by side table of mathematical statements and code counterparts would be good to highlight the similarities}
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$.
 
 Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}.
 
