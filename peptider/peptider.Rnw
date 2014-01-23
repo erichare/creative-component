@@ -1,26 +1,37 @@
-\documentclass{article}
-\usepackage{graphicx, hyperref}
-\usepackage[margin=1in]{geometry}
-\usepackage[backend=bibtex, natbib=true]{biblatex}
-\usepackage{float}    % for fig.pos='H'
-\usepackage{amsmath}
-\newtheorem{rexample}{R Example}[section]
-\addbibresource{references.bib}
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{RJournal}
+\usepackage{amsmath,amssymb,array,float}
+\usepackage{booktabs}
 
-\setlength{\parskip}{3ex}
-\setlength{\parindent}{0pt}
-
-\title{Analyzing Peptide Libraries with peptider}
-\author{Eric Riemer Hare}
+\newcommand{\hh}[1]{{\color{magenta} #1}} 
 
 \begin{document}
-<<concordance, echo=FALSE>>=
-opts_chunk$set(concordance=TRUE)
-opts_knit$set(self.contained=FALSE)
-@
+
+%% do not edit, for illustration only
+\sectionhead{Contributed research article}
+\volume{XX}
+\volnumber{YY}
+\year{2014}
+\month{AAAA}
+
+%% replace RJtemplate with your article
+\begin{article}
+
+\title{Analyzing Peptide Libraries with peptider}
+\author{by Eric Riemer Hare}
 
 \maketitle
-\clearpage
+
+\abstract{
+Peptide libraries have important theoretical and practical applications in the fields of biology and medicine. This paper introduces a new R package \pkg{peptider} which allows for a statistical analysis of these peptide libraries. Based on the research of Sieber et al., \pkg{peptider} implements a suite of functions to calculate functional diversity, relative efficiency, expected coverage, and other measures of peptide library diversity. With flexible support for a number of encoding schemes and library sizes, \pkg{peptider} can be used to analyze a wide variety of peptide libraries.
+}
+
+<<concordance, echo=FALSE>>=
+    opts_chunk$set(concordance=TRUE)
+    opts_knit$set(self.contained=FALSE)
+@
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
     library(peptider)
@@ -30,12 +41,12 @@ opts_knit$set(self.contained=FALSE)
 \section{Introduction}
 Libraries of peptides, or amino acid sequences, have a number of applications in the Biological sciences, from studying protein interactions, to vaccine research. Despite their importance, little analysis has been done to assess the statistical properties of different peptide libraries.
 
-{\it Peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and trimer schemes. It also allows for easy analysis of user-created custom library schemes. Peptider makes use of the R package {\it discreteRV}, which allows for manipulation and analysis of discrete random variables. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated.
+\pkg{peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and trimer schemes. It also allows for easy analysis of user-created custom library schemes. \pkg{peptider} makes use of the R package \pkg{discreteRV}, which allows for manipulation and analysis of discrete random variables. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated.
 
 This paper will focus on two distinct functional areas of peptider. The first is Library Diversity, or statistical measures of the quality of the library itself. The second is Peptide Coverage, or how likely the library is to include particularly desired peptides, or peptides that are most similar to desired peptides. Before proceeding to discuss these measures, we will first discuss the built-in library schemes, and how to define custom schemes.
 
 \subsection{Library Schemes}
-Peptider has several built-in library schemes. The first is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon, and hence there are 64 possible nucleotides. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be three bases, yielding 48 nucleotides. Both NNK and NNS have identical statistical properties in this analysis, with the third position restricted to two bases for a total of 32 nucleotides. Finally, there are trimer-based libraries in which the codons are pre-defined. Each of these scheme definitions can be accessed with the {\it scheme} function.
+\pkg{peptider} has several built-in library schemes. The first is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon, and hence there are 64 possible nucleotides. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be three bases, yielding 48 nucleotides. Both NNK and NNS have identical statistical properties in this analysis, with the third position restricted to two bases for a total of 32 nucleotides. Finally, there are trimer-based libraries in which the codons are pre-defined. Each of these scheme definitions can be accessed with the \code{scheme} function.
 
 <<scheme_def>>=
 scheme("NNN")
@@ -68,7 +79,7 @@ The functional diversity of a library is the overall number of different peptide
 D(N, k) = \sum_{i=1}^{v^k}b_i(1 - e^{-Np_i/b_i})
 \end{align*}
 
-To compute this diversity measure in peptider, the {\it makowski} function can be used. 
+To compute this diversity measure in peptider, the \code{makowski} function can be used. 
 
 <<makowski>>=
 makowski(6, "NNK")
@@ -81,7 +92,7 @@ The expected coverage of the library is directly related to the diversity of the
 C(N, k) = D(N, k)/c^k
 \end{align*}
 
-Note that the diversity of the library can range between 0 (for a library with no peptides) and $c^k$ (wherein the library includes every possible peptide). Hence, the coverage must range from 0 to 1. Peptider includes a function to compute the coverage, which again takes the peptide length and library scheme as parameters. It also accepts a parameter N representing the overall number of peptides in the library.
+Note that the diversity of the library can range between 0 (for a library with no peptides) and $c^k$ (wherein the library includes every possible peptide). Hence, the coverage must range from 0 to 1. \pkg{peptider} includes a function to compute the coverage, which again takes the peptide length and library scheme as parameters. It also accepts a parameter N representing the overall number of peptides in the library.
 
 <<coverage>>=
 coverage(6, "NNK", N = 10^8)
@@ -94,14 +105,14 @@ In general, it is desireable to achieve a coverage as close as possible to one i
 R(N, k) = D(N, k)/N
 \end{align*}
 
-As N increases, the relative efficiency subsequently decreases. An ideal peptide library from a cost-benefit perspective would contain both a high diversity (and hence high expected coverage) and still a high relative effeciency. Efficiency can be computed with peptider in the same way as coverage.
+As N increases, the relative efficiency subsequently decreases. An ideal peptide library from a cost-benefit perspective would contain both a high diversity (and hence high expected coverage) and still a high relative effeciency. Efficiency can be computed with \pkg{peptider} in the same way as coverage.
 
 <<efficiency>>=
 efficiency(6, "NNK", N = 10^8)
 @
 
 \section{Peptide Coverage}
-The measures of library diversity included in peptider introduced to this point are useful to broadly assess the library performance. However, applications of peptide libraries often require knowledge of the probability of observing particular peptides in the library[REF].
+The measures of library diversity included in \pkg{peptider} introduced to this point are useful to broadly assess the library performance. However, applications of peptide libraries often require knowledge of the probability of observing particular peptides in the library[REF].
 
 \subsection{Peptide Inclusion}
 The peptide inclusion probability is the probability of obtaining at least one instance of a particular peptide in the library. If X is defined as a random variable representing the number of occurrences of this peptide, the probability is
@@ -110,13 +121,13 @@ The peptide inclusion probability is the probability of obtaining at least one i
 P(X \ge 1) = 1 - P(X = 0) \approx 1 - e^{-N\sum_ip_i}
 \end{align*}
 
-$p_i$ again is the probability of peptide class i. Because of the dependence on the peptide class, this inclusion probability will vary depending on the particular peptide of interest, and the library scheme. The {\it ppeptide} function in peptider allows computation of the probability. It accepts a peptide sequence as a character vector, the library scheme, and the library size.
+$p_i$ again is the probability of peptide class i. Because of the dependence on the peptide class, this inclusion probability will vary depending on the particular peptide of interest, and the library scheme. The \code{ppeptide} function in \pkg{peptider} allows computation of the probability. It accepts a peptide sequence as a character vector, the library scheme, and the library size.
 
 <<inclusion>>=
 ppeptide("HENNING", "NNK", N = 10^10)
 @
 
-We may also be interested in the range of inclusion probabilities for all peptides rather than just a particular sequence. In this case, the {\it detect} function is useful. detect differs a bit syntactically as it requires the created library to be passed in as an argument. For an NNK library with peptide lengths 6 and library size $10^7$, we have:
+We may also be interested in the range of inclusion probabilities for all peptides rather than just a particular sequence. In this case, the \code{detect} function is useful. detect differs a bit syntactically as it requires the created library to be passed in as an argument. For an NNK library with peptide lengths 6 and library size $10^7$, we have:
 
 <<detect>>=
 my_lib <- libscheme("NNK", 6)
@@ -131,7 +142,7 @@ qplot(detect(my_lib, 10^7), weight = di, geom = "histogram", data = my_lib$data)
 @
 
 \subsection{Neighborhoods}
-A related concern to inclusion of a particular peptide is inclusion of a peptide's ``neighbors". A degree-n neighbor of a peptide p is any peptide that differs by at most n amino acids from p. For example, the length 7 peptide HENNING includes degree-1 neighbor QENNING as well as HQNNING, and a degree-2 neighbor YENNLNG. Peptider includes a function for working with neighborhoods, {\it getNeighbors}, which accepts a peptide sequence as a character vector and returns all degree-1 neighbors.
+A related concern to inclusion of a particular peptide is inclusion of a peptide's ``neighbors". A degree-n neighbor of a peptide p is any peptide that differs by at most n amino acids from p. For example, the length 7 peptide HENNING includes degree-1 neighbor QENNING as well as HQNNING, and a degree-2 neighbor YENNLNG. \pkg{peptider} includes a function for working with neighborhoods, \code{getNeighbors}, which accepts a peptide sequence as a character vector and returns all degree-1 neighbors.
 
 <<getneighbors>>=
 getNeighbors("HENNING")
@@ -146,7 +157,7 @@ unique(unlist(getNeighbors(getNeighbors("HENNING"))))
 \section{Further Work}
 Although these functions are suitable for working with peptides up to about length ten, they become slower and more problematic for larger peptides. Work has progressed on a new suite of functions which simplify the encoding of peptides. By recognizing the assumption of independence of each amino acid, we can store counts of each peptide class in order to avoid storing all possible permutations of peptide classes. This greatly simplifies the computation time and allows for peptides of length 20 and beyond to be analyzed in the context of peptide libraries.
 
-Replacement functions for most of the previously described functionality using this new encoding scheme is available unexported in peptider. For instance, to compute the coverage of a size $10^25$ NNK library with peptides of length 18, one can call:
+Replacement functions for most of the previously described functionality using this new encoding scheme is available unexported in peptider. For instance, to compute the coverage of a size $10^{25}$ NNK library with peptides of length 18, one can call:
 
 <<makowski_new>>=
 peptider:::coverage_new(18, "NNK", N = 10^25)
@@ -155,5 +166,8 @@ peptider:::coverage_new(18, "NNK", N = 10^25)
 Functions for coverage, efficiency, diversity, and inclusion probabilities have all been written and have the ``new" suffix.
 
 \section{Conclusion}
+\pkg{peptider} aims to provide a seamless way to assess the quality of different peptide libraries. By providing functions to calculate both the diversity of the peptide library itself, as well as inclusion probabilities of particular peptides of interest, it can help researchers in other fields to make a more informed decision regarding which libraries to invest in.
+
+\end{article}
 
 \end{document}

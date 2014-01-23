@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{RJournal}
-\usepackage{amsmath,amssymb,array}
+\usepackage{amsmath,amssymb,array,float}
 \usepackage{booktabs}
 
 \newcommand{\hh}[1]{{\color{magenta} #1}} 
@@ -27,13 +27,13 @@
 \maketitle
 
 \abstract{
-This is where the abstract goes}
+A major issue in statistics education is the sometimes large disparity between the mathematical and theoretical coursework, and the computational coursework. discreteRV is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to that which is found in introductory probability courses. It is simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, I introduce and motivate discreteRV, describe its functionality, and provide reproducible examples illustrating its use.
+}
 
 <<concordance, echo=FALSE>>=
-opts_chunk$set(concordance=TRUE)
-opts_knit$set(self.contained=FALSE)
+    opts_chunk$set(concordance=TRUE)
+    opts_knit$set(self.contained=FALSE)
 @
-
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
     #library(devtools)
@@ -45,10 +45,9 @@ opts_knit$set(self.contained=FALSE)
 
 \section{Introduction}
 
-%Dr. Andreas Buja, professor of Statistics at the University of Pennsylvania, created a set of R functions implementing discrete random variables[REF]. 
-\hh{What is the idea behind discreteRV? - something like: one of the big hurdles in teaching probability in an undergraduating setting is the missing link between theoretical statements in books and lectures and the notation used in statistical software required in more and more classes. }
+One of the primary hurdles in teaching probability courses in an undergraduate setting is the missing link between theoretical statements from textbooks and lectures, and the notation used in statistical software required in more and more classes. Depending on the background of the student, this missing link can manifest itself in a couple of different ways. Some students will master the theoretical concepts and notation, but struggle in a computing environment. Others will feel very comfortable with statistical programming, but sometimes struggle to translate that back to the classroom probability setting.
 
-These functions were compiled and documented in a package called \pkg{discreteRV}.  \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN)[REF].
+\pkg{discreteRV} is an attempt to bridge this gap. It provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. It uses syntax which in most cases closely matches probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN)[REF].
 
 The functions of \pkg{discreteRV} are organized into two logical areas, termed probabilities and simulations.
 
@@ -91,7 +90,7 @@ The centerpiece of \pkg{discreteRV} is a set of functions to create and manipula
 In \pkg{discreteRV}, a random variable is defined through the use of the \code{make.RV} function.  \code{make.RV} accepts a vector of probabilities and a vector of outcome values, and returns an \code{RV} object.
 Consider, for instance, an RV object \code{X} which we will use to represent a single roll of a fair die.
 
-<<makeRV, rexample = TRUE>>=
+<<makeRV>>=
 X <- make.RV(vals = 1:6, probs = rep("1/6", times = 6))
 X
 @
@@ -116,23 +115,23 @@ Several other distributional quantities are computable, including the expected v
 
 \subsection{Joint Distributions}
 
-Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the {\it multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
+Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
 
-<<fairdiemult, echo=FALSE, results='asis'>>=
+<<fairdiemult, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
 
 XX <- multN(X, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
-<<fairdiemult3, echo=FALSE, results='asis'>>=
+<<fairdiemult3, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
 
 XX <- multN(X, n = 3, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
-discreteRV also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the {\it SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, {\it SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
+discreteRV also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
 
 <<fairdiesofi, echo=FALSE, results='asis'>>=
 X2 <- SofIID(X, n = 2, fractions = TRUE)
@@ -140,7 +139,7 @@ print(xtable(t(data.frame(Outcome = as.character(X2), Probability = names(X2))),
 @
 
 \subsection{Plotting}
-discreteRV includes a {\it plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling {\it plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 100 independent rolls of a die is given in Figure \ref{fig:plot100}.
+discreteRV includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 100 independent rolls of a die is given in Figure \ref{fig:plot100}.
 
 <<plot1, echo=FALSE, fig.cap='Plot method called on a fair die random variable.', fig.align='center', fig.pos='H'>>=
 plot(X)
@@ -155,7 +154,7 @@ X100 <- SofIID(X, n = 100, progress = FALSE)
 plot(X100)
 @
 
-In addition to a plotting method, there is also a method for {\it qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}.
+In addition to a plotting method, there is also a method for \code{qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}.
 
 <<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 100 fair die random variable.', fig.align='center', fig.pos='H'>>=
 qqnorm(X100)        
@@ -181,20 +180,20 @@ skewSim & Skew of the empirical distribution of simulated data \\
 \end{table}
 
 \subsection{Creation}
-Creating a simulated random vector is done by using the {\it rsim} function. {\it rsim} accepts a parameter n representing the number of independent trials to simulate, and a parameter X representing the random variable with which to simulate from. For example, suppose we'd like to simulate ten trials from a fair die. We have already created a random variable object X, so we simply call rsim as follows:
+Creating a simulated random vector is done by using the \code{rsim} function. \code{rsim} accepts a parameter n representing the number of independent trials to simulate, and a parameter X representing the random variable with which to simulate from. For example, suppose we'd like to simulate ten trials from a fair die. We have already created a random variable object X, so we simply call rsim as follows:
 
 <<rsim>>=
 X.sim <- rsim(10, X)
 X.sim
 @
 
-The object returned is a vector of simulated values, with a class attribute to contain the random variable that was used for the simulation. If we would like to retrieve only the simulated values and exclude the attached probabilities, we can coerce the object into a vector using R's built-in {\it as.vector} function.
+The object returned is a vector of simulated values, with a class attribute to contain the random variable that was used for the simulation. If we would like to retrieve only the simulated values and exclude the attached probabilities, we can coerce the object into a vector using R's built-in \code{as.vector} function.
 
 <<asvector>>=
 as.vector(X.sim)
 @
 
-It is also possible to retrieve some quantities from the simulation. We can retrieve the empirical distribution of simulated values with the {\it props} function. This will return the outcomes from the original random variable object, and the observed proportion of simulated values for each of the outcomes. We can also compute observed proportions of events by using the {\it Prop} function. Similar to the {\it P} function for probability computations on random variable objects, {\it Prop} accepts a variety of logical statements.
+It is also possible to retrieve some quantities from the simulation. We can retrieve the empirical distribution of simulated values with the \code{props} function. This will return the outcomes from the original random variable object, and the observed proportion of simulated values for each of the outcomes. We can also compute observed proportions of events by using the \code{Prop} function. Similar to the \code{P} function for probability computations on random variable objects, \code{Prop} accepts a variety of logical statements.
 
 <<props>>=
 props(X.sim)
