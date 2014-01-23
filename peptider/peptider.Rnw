@@ -20,7 +20,7 @@
 \begin{article}
 
 \title{Analyzing Peptide Libraries with peptider}
-\author{by Eric Riemer Hare}
+\author{by Eric Riemer Hare, Heike Hofmann, and Timo Sieber}
 
 \maketitle
 

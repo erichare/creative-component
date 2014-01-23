@@ -55,32 +55,59 @@ The functions of \pkg{discreteRV} are organized into two logical areas, termed p
 
 discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}.
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \scalebox{0.95}{
 \begin{tabular}{lp{0.8\textwidth}}\hline
 Name & Description \\ 
 \hline
+Creation \\ 
+\hline
 \code{as.RV} & Turn a probability vector with possible outcome values in the names() attribute into a random variable \\
-E & Expected value of a random variable \\
-KURT & Kurtosis of a random variable \\
-make.RV & Make a random variable consisting of possible outcome values and their probabilities or odds \\
-margins & Marginal distribution of a joint random variable \\
-mult & Joint probability mass function of random variables X and Y \\
-multN & Probability mass function of $X^n$ \\
-P & Calculate probabilities of events \\
-plot.RV & Plot a random variable of class RV \\
-print.RV & Print a random variable of class RV \\
-probs & Probability mass function of random variable X \\
-qqnorm.RV & Normal quantile plot for RVs to answer the question how close to normal it is \\
-SD & Standard deviation of a random variable \\
-SKEW & Skewness of a random variable \\
-SofI & Sum of independent random variables \\
-SofIID & Sum of independent identically distributed random variables \\
-V & Variance of a random variable \\
+\code{make.RV} & Make a random variable consisting of possible outcome values and their probabilities or odds \\
+\hline
+Manipulation \\ 
+\hline
+\code{margins} & Marginal distribution of a joint random variable \\
+\code{mult} & Joint probability mass function of random variables X and Y \\
+\code{multN} & Probability mass function of $X^n$ \\
+\code{SofI} & Sum of independent random variables \\
+\code{SofIID} & Sum of independent identically distributed random variables \\
+\hline
+Probabilities \\ 
+\hline
+\code{E} & Expected value of a random variable \\
+\code{KURT} & Kurtosis of a random variable \\
+\code{P} & Calculate probabilities of events \\
+\code{probs} & Probability mass function of random variable X \\
+\code{SD} & Standard deviation of a random variable \\
+\code{SKEW} & Skewness of a random variable \\
+\code{V} & Variance of a random variable \\
+\hline
+Methods \\
+\hline 
+\code{plot.RV} & Plot a random variable of class RV \\
+\code{print.RV} & Print a random variable of class RV \\
+\code{qqnorm.RV} & Normal quantile plot for RVs to answer the question how close to normal it is \\
+
 \hline
 \end{tabular}}
-\caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV. \hh{Sort by functionality rather than alphabetically}}
+\caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scalebox{0.95}{
+\begin{tabular}{lp{0.8\textwidth}}\hline
+discreteRV & Casella and Berger \\ 
+\hline
+\code{E(X)} & E(X) \\
+\code{P(X == x)} & P(X = x) \\
+\code{probs(X)} & f(x) \\
+\code{SD(X)} & sd(X) \\
+\code{V(X)} & var(X) \\
+\end{tabular}}
+\caption{\label{tbl:discreteRV-connect} Probability functions in discreteRV and their corresponding syntax in introductory statistics courses.}
 \end{table}
 
 \subsection{Creating random variables}
