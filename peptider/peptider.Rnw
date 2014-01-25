@@ -5,8 +5,6 @@
 \usepackage{amsmath,amssymb,array,float}
 \usepackage{booktabs}
 
-\addbibresource{references.bib}
-
 \newcommand{\hh}[1]{{\color{magenta} #1}} 
 
 \begin{document}
@@ -41,7 +39,7 @@ Peptide libraries have important theoretical and practical applications in the f
 @
 
 \section{Introduction}
-Libraries of peptides, or amino acid sequences, have a number of applications in the Biological sciences, from studying protein interactions, to vaccine research. Despite their importance, little analysis has been done to assess the statistical properties of different peptide libraries.
+Libraries of peptides, or amino acid sequences, have a number of applications in the Biological sciences, from studying protein interactions, to vaccine research (\cite{r:1999}, \cite{i:2001}). Despite their importance, little analysis has been done to assess the statistical properties of different peptide libraries.
 
 \pkg{peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and trimer schemes. It also allows for easy analysis of user-created custom library schemes. \pkg{peptider} makes use of the R package \pkg{discreteRV}, which allows for manipulation and analysis of discrete random variables. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated.
 
@@ -100,6 +98,25 @@ Note that the diversity of the library can range between 0 (for a library with n
 coverage(6, "NNK", N = 10^8)
 @
 
+It may be of interest to compare the expected coverage across the different encoding schemes available in \pkg{peptider}. We can plot the expected coverage as a function of the library size for all four built-in encoding schemes as follows:
+
+<<coverage_calc, cache=TRUE>>=
+library(plyr)
+library(ggplot2)
+
+dframe <- expand.grid(Scheme = c("NNN", "NNB", "NNK", "trimer"), Size = 10^(4:10))
+results.dframe <- ddply(dframe, .(Scheme, Size), function(row){
+    coverage(6, as.character(row$Scheme), row$Size)
+})
+names(results.dframe)[3] <- "Coverage"
+@
+
+<<coverage_plot,, fig.height=5, fig.width=7>>=
+qplot(Size, Coverage, data = results.dframe, geom = "line", colour = Scheme, size = I(2)) + 
+    scale_x_log10(breaks = 10^(4:10)) +
+    theme(legend.position = "bottom")
+@
+
 \subsection{Relative Efficiency}
 In general, it is desireable to achieve a coverage as close as possible to one if we'd like the library to contain all possible peptides. One can achieve this with arbitrarily high probability by increasing the library size (N). However, doing so can drastically increase the cost of the library and may not always be possible. Ideally, the library should contain as high as possible diversity with as small as possible size. Relative Efficiency is a measure to quantify this, and is defined as:
 
@@ -114,7 +131,7 @@ efficiency(6, "NNK", N = 10^8)
 @
 
 \section{Peptide Coverage}
-The measures of library diversity included in \pkg{peptider} introduced to this point are useful to broadly assess the library performance. However, applications of peptide libraries often require knowledge of the probability of observing particular peptides in the library[REF].
+The measures of library diversity included in \pkg{peptider} introduced to this point are useful to broadly assess the library performance. However, applications of peptide libraries often require knowledge of the probability of observing particular peptides in the library. \pkg{peptider} helps to analyze the the probability of observing both the peptide of interest to the user, as well as peptides that are most similar.
 
 \subsection{Peptide Inclusion}
 The peptide inclusion probability is the probability of obtaining at least one instance of a particular peptide in the library. If X is defined as a random variable representing the number of occurrences of this peptide, the probability is
@@ -169,6 +186,8 @@ Functions for coverage, efficiency, diversity, and inclusion probabilities have 
 
 \section{Conclusion}
 \pkg{peptider} aims to provide a seamless way to assess the quality of different peptide libraries. By providing functions to calculate both the diversity of the peptide library itself, as well as inclusion probabilities of particular peptides of interest, it can help researchers in other fields to make a more informed decision regarding which libraries to invest in.
+
+\bibliography{references.bib}
 
 \end{article}
 
