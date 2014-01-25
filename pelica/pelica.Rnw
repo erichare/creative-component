@@ -14,6 +14,11 @@
 \begin{document}
 
 \maketitle
+
+\abstract{
+This paper introduces a web application called PeLiCa, or Peptide Library Calculator. Built upon the Shiny framework, PeLiCa provides an easy-to-use and powerful front-end to the R package {\it peptider}. PeLiCa allows users to conduct a statistical analysis of a set of pre-defined peptide library schemes, or a custom-defined scheme of their own choosing. Results are instantly displayed, allowing the user to make a more informed decision regarding what specific peptide library will be most useful for their particular application or research. 
+}
+
 \clearpage
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
