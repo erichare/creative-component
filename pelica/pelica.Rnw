@@ -3,7 +3,6 @@
 \usepackage[margin=1in]{geometry}
 \usepackage[backend=bibtex, natbib=true]{biblatex}
 \usepackage{float}    % for fig.pos='H'
-\newtheorem{rexample}{R Example}[section]
 \addbibresource{references.bib}
 
 \setlength{\parskip}{3ex}

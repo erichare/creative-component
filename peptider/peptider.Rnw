@@ -5,6 +5,8 @@
 \usepackage{amsmath,amssymb,array,float}
 \usepackage{booktabs}
 
+\addbibresource{references.bib}
+
 \newcommand{\hh}[1]{{\color{magenta} #1}} 
 
 \begin{document}

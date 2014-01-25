@@ -47,13 +47,13 @@ A major issue in statistics education is the sometimes large disparity between t
 
 One of the primary hurdles in teaching probability courses in an undergraduate setting is the missing link between theoretical statements from textbooks and lectures, and the notation used in statistical software required in more and more classes. Depending on the background of the student, this missing link can manifest itself in a couple of different ways. Some students will master the theoretical concepts and notation, but struggle in a computing environment. Others will feel very comfortable with statistical programming, but sometimes struggle to translate that back to the classroom probability setting.
 
-\pkg{discreteRV} is an attempt to bridge this gap. It provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. It uses syntax which in most cases closely matches probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN)[REF].
+\pkg{discreteRV} is an attempt to bridge this gap. It provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. It uses syntax which in most cases closely matches probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN).
 
 The functions of \pkg{discreteRV} are organized into two logical areas, termed probabilities and simulations.
 
 \section{Probabilities}
 
-discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}.
+discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}. In Table \ref{tbl:discreteRV-connect}, the notational similarities between \pkg{discreteRV} and the commonly used book \cite{cb:2001} is shown. 
 
 \begin{table}[H]
 \centering
@@ -111,11 +111,20 @@ discreteRV & Casella and Berger \\
 \end{table}
 
 \subsection{Creating random variables}
-The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable maps a set of possible outcomes to a set of probabilities that sum to one. 
-\hh{isn't that strictly speaking a probability mass function? - I think it would be good to walk through the math and the computational expressions side by side - so rather than the table, it might be better to follow Andreas' example on his website and write out the mathematical statements as well. }
+The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. As per \cite{ws:1999}, a random variable is a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a random variable that can take on a countable and finite set of values. Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiement to probabilities which must sum to one. Throughout this document, I will work with a simple example of a discrete random variable representing the value of a roll of a fair die. Formally, we can define such a random variable and its probability mass function as follows:
 
-In \pkg{discreteRV}, a random variable is defined through the use of the \code{make.RV} function.  \code{make.RV} accepts a vector of probabilities and a vector of outcome values, and returns an \code{RV} object.
-Consider, for instance, an RV object \code{X} which we will use to represent a single roll of a fair die.
+Let $X$ be a random variable representing a single roll of a fair die. Then,
+
+\begin{displaymath}
+   f(x) = P(X = x) = \left\{
+     \begin{array}{lr}
+       \frac{1}{6} & x \in {1, 2, 3, 4, 5, 6}\\
+       0 & \text{otherwise}
+     \end{array}
+   \right.
+\end{displaymath} \\
+
+In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of probabilities and a vector of outcome values, and returns an \code{RV} object. Consider our example of an RV object \code{X} which we will use to represent a single roll of a fair die. The code to create such a random variable is as follows:
 
 <<makeRV>>=
 X <- make.RV(vals = 1:6, probs = rep("1/6", times = 6))
@@ -230,6 +239,8 @@ Prop(X.sim > 3)
 
 \section{Conclusion}
 The power of discreteRV is truly in its simplicity. Because it uses familiar introductory probability syntax, it can allow students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, discreteRV also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
+
+\bibliography{references.bib}
 
 \end{article}
 
