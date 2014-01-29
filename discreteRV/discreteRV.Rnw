@@ -30,6 +30,7 @@
 A major issue in statistics education is the sometimes large disparity between the mathematical and theoretical coursework, and the computational coursework. discreteRV is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to that which is found in introductory probability courses. It is simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, I introduce and motivate discreteRV, describe its functionality, and provide reproducible examples illustrating its use.
 }
 
+\hh{still to do: formatting is not consistent yet. You need to add some references (github pages for packages, R, ... ). The figures need to be made smaller - could you play with the fig.width and out.width parameters?}
 <<concordance, echo=FALSE>>=
     opts_chunk$set(concordance=TRUE)
     opts_knit$set(self.contained=FALSE)
@@ -53,7 +54,7 @@ The functions of \pkg{discreteRV} are organized into two logical areas, termed p
 
 \section{Probabilities}
 
-discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}. In Table \ref{tbl:discreteRV-connect}, the notational similarities between \pkg{discreteRV} and the commonly used book \cite{cb:2001} is shown. 
+discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}. In Table \ref{tbl:discreteRV-connect}, the notational similarities between \pkg{discreteRV} and the commonly used book by \cite{cb:2001} is shown. 
 
 \begin{table}[H]
 \centering
@@ -92,7 +93,7 @@ Methods \\
 
 \hline
 \end{tabular}}
-\caption{\label{tbl:discreteRV-probs} List of the probability functions contained in discreteRV.}
+\caption{\label{tbl:discreteRV-probs} Overview of functions provided in \pkg{discreteRV} ordered by topics.}
 \end{table}
 
 \begin{table}[H]
@@ -111,7 +112,7 @@ discreteRV & Casella and Berger \\
 \end{table}
 
 \subsection{Creating random variables}
-The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable $X$ is defined \citep[see e.g.~]{ws:1999} as a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a special case that can only take on a countable and finite set of values. Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiment to probabilities which must sum to one. Throughout this document, we will work with a simple example of a discrete random variable representing the value of a roll of a fair die. Formally, we can define such a random variable and its probability mass function as follows:
+The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable $X$ is defined \citep[see e.g.~][]{ws:1999} as a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a special case that can only take on a countable and finite set of values. Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiment to probabilities which must sum to one. Throughout this document, we will work with a simple example of a discrete random variable representing the value of a roll of a fair die. Formally, we can define such a random variable and its probability mass function as follows:
 
 Let $X$ be a random variable representing a single roll of a fair die. Then,
 
@@ -145,7 +146,7 @@ names(X)
 
 \subsection{Probabilities}
 
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$.
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$. \hh{should we include operators called and and or to avoid the unfortunate interpretation of the pipe?}
 
 Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}.
 
