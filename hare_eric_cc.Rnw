@@ -3,6 +3,8 @@
 \usepackage{pdfpages}
 \usepackage{float}
 
+\newcommand{\hh}[1]{{\color{magenta} #1}} 
+
 \title{A Framework and Application for Efficient Analysis of Peptide Libraries}
 \author{Eric Riemer Hare}
 
@@ -15,7 +17,7 @@ opts_knit$set(self.contained=FALSE)
 @
 
 My creative component consists of three separate papers, each covering a different component of the overall project I worked on. The layering of the three components is illustrated in Figure \ref{layers}. The structure of this document is organized in the same manner, beginning with discreteRV, continuing with peptider, and ending with PeLiCa.
-
+\hh{Give a bit more information:  discreteRV is to be submitted to the R Journal, same with peptider, while PeLiCa is going into the software issue of XXX (which journal? I can't find the name right now). Include the peptider paper that's submitted - just as an attachment to see how things came together.}
 \begin{figure}[H]
   \centering
     \includegraphics[width=\textwidth]{figure/CC_Drawing_1}
