@@ -4,3 +4,15 @@
 # Example code in package build process
 *-Ex.R
 .Rproj.user
+
+*.tex
+
+*.log
+
+*.gz
+
+*.bib
+
+*.bbl
+
+*.xml
