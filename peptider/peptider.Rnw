@@ -29,7 +29,7 @@ Peptide libraries have important theoretical and practical applications in the f
 }
 
 <<concordance, echo=FALSE>>=
-    opts_chunk$set(concordance=TRUE)
+    opts_chunk$set(concordance=TRUE, fig.width=4, fig.height=4)
     opts_knit$set(self.contained=FALSE)
 @
 
@@ -41,7 +41,7 @@ Peptide libraries have important theoretical and practical applications in the f
 \section{Introduction}
 Libraries of peptides, or amino acid sequences, have a number of applications in the Biological sciences, from studying protein interactions, to vaccine research (\cite{r:1999}, \cite{i:2001}). Despite their importance, little analysis has been done to assess the statistical properties of different peptide libraries.
 
-\pkg{peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and trimer schemes. It also allows for easy analysis of user-created custom library schemes. \pkg{peptider} makes use of the R package \pkg{discreteRV}, which allows for manipulation and analysis of discrete random variables. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated.
+\pkg{peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and trimer schemes. It also allows for easy analysis of user-created custom library schemes. \pkg{peptider} makes use of the R package \pkg{discreteRV}, which allows for manipulation and analysis of discrete random variables. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated. The corresponding definitions for the statistical functions in \pkg{peptider} are taken from \cite{m4}.
 
 This paper will focus on two distinct functional areas of peptider. The first is Library Diversity, or statistical measures of the quality of the library itself. The second is Peptide Coverage, or how likely the library is to include particularly desired peptides, or peptides that are most similar to desired peptides. Before proceeding to discuss these measures, we will first discuss the built-in library schemes, and how to define custom schemes.
 
@@ -104,16 +104,16 @@ It may be of interest to compare the expected coverage across the different enco
 library(plyr)
 library(ggplot2)
 
-dframe <- expand.grid(Scheme = c("NNN", "NNB", "NNK", "trimer"), Size = 10^(4:10))
+dframe <- expand.grid(Scheme = c("NNN", "NNB", "NNK", "trimer"), Size = 10^(6:10))
 results.dframe <- ddply(dframe, .(Scheme, Size), function(row){
     coverage(6, as.character(row$Scheme), row$Size)
 })
 names(results.dframe)[3] <- "Coverage"
 @
 
-<<coverage_plot,, fig.height=5, fig.width=7>>=
-qplot(Size, Coverage, data = results.dframe, geom = "line", colour = Scheme, size = I(2)) + 
-    scale_x_log10(breaks = 10^(4:10)) +
+<<coverage_plot,, fig.height=3.5, fig.width=4.5, message=FALSE>>=
+qplot(Size, Coverage, data = results.dframe, geom = "line", colour = Scheme, size = I(1.5)) + 
+    scale_x_log10(breaks = 10^(6:10), labels = expression(10^6, 10^7, 10^8, 10^9, 10^10)) +
     theme(legend.position = "bottom")
 @
 
@@ -154,7 +154,7 @@ my_lib <- libscheme("NNK", 6)
 summary(detect(my_lib, 10^7))
 @
 
-<<detectplot>>=
+<<detectplot, fig.width=4.5, fig.height=4>>=
 qplot(detect(my_lib, 10^7), weight = di, geom = "histogram", data = my_lib$data) +
     xlab("Inclusion Probability") +
     ylab("Count")
@@ -187,6 +187,7 @@ Functions for coverage, efficiency, diversity, and inclusion probabilities have 
 \section{Conclusion}
 \pkg{peptider} aims to provide a seamless way to assess the quality of different peptide libraries. By providing functions to calculate both the diversity of the peptide library itself, as well as inclusion probabilities of particular peptides of interest, it can help researchers in other fields to make a more informed decision regarding which libraries to invest in.
 
+\nocite{*}
 \bibliography{references.bib}
 
 \end{article}
