@@ -27,12 +27,11 @@
 \maketitle
 
 \abstract{
-A major issue in statistics education is the sometimes large disparity between the mathematical and theoretical coursework, and the computational coursework. discreteRV is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to that which is found in introductory probability courses. It is simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, I introduce and motivate discreteRV, describe its functionality, and provide reproducible examples illustrating its use.
+A major issue in statistics education is the sometimes large disparity between the mathematical and theoretical coursework, and the computational coursework. \pkg{discreteRV} is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to that which is found in introductory probability courses. It is simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, I introduce and motivate \pkg{discreteRV}, describe its functionality, and provide reproducible examples illustrating its use.
 }
 
-\hh{still to do: formatting is not consistent yet. You need to add some references (github pages for packages, R, ... ). The figures need to be made smaller - could you play with the fig.width and out.width parameters?}
 <<concordance, echo=FALSE>>=
-    opts_chunk$set(concordance=TRUE)
+    opts_chunk$set(concordance=TRUE, fig.width=4, fig.height=4)
     opts_knit$set(self.contained=FALSE)
 @
 
@@ -54,9 +53,9 @@ The functions of \pkg{discreteRV} are organized into two logical areas, termed p
 
 \section{Probabilities}
 
-discreteRV includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}. In Table \ref{tbl:discreteRV-connect}, the notational similarities between \pkg{discreteRV} and the commonly used book by \cite{cb:2001} is shown. 
+\pkg{discreteRV} includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}. In Table \ref{tbl:discreteRV-connect}, the notational similarities between \pkg{discreteRV} and the commonly used book by \cite{cb:2001} is shown. 
 
-\begin{table}[H]
+\begin{table}
 \centering
 \scalebox{0.95}{
 \begin{tabular}{lp{0.8\textwidth}}\hline
@@ -96,19 +95,22 @@ Methods \\
 \caption{\label{tbl:discreteRV-probs} Overview of functions provided in \pkg{discreteRV} ordered by topics.}
 \end{table}
 
-\begin{table}[H]
+\begin{table}
 \centering
 \scalebox{0.95}{
 \begin{tabular}{lp{0.8\textwidth}}\hline
 discreteRV & Casella and Berger \\ 
 \hline
 \code{E(X)} & E(X) \\
-\code{P(X == x)} & P(X = x) \\
-\code{probs(X)} & f(x) \\
-\code{SD(X)} & sd(X) \\
-\code{V(X)} & var(X) \\
+\code{P(X == x)} & $P(X = x)$ \\
+\code{P(X >= x)} & $P(X \ge x)$ \\
+\code{P(X < x1 \& X > x2)} & $P(X < x_1 \cap X > x_2)$ \\
+\code{P(X < x1 | X > x2)} & $P(X < x_1 \cup X > x_2)$ \\
+\code{probs(X)} & $f(x)$ \\
+\code{SD(X)} & $sd(X)$ \\
+\code{V(X)} & $var(X)$ \\
 \end{tabular}}
-\caption{\label{tbl:discreteRV-connect} Probability functions in discreteRV and their corresponding syntax in introductory statistics courses.}
+\caption{\label{tbl:discreteRV-connect} Probability functions in \pkg{discreteRV} and their corresponding syntax in introductory statistics courses.}
 \end{table}
 
 \subsection{Creating random variables}
@@ -146,13 +148,13 @@ names(X)
 
 \subsection{Probabilities}
 
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$. \hh{should we include operators called and and or to avoid the unfortunate interpretation of the pipe?}
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$.
 
 Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}.
 
 \subsection{Joint Distributions}
 
-Aside from moments and probability statements, discreteRV includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
+Aside from moments and probability statements, \pkg{discreteRV} includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
 
 <<fairdiemult, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
@@ -168,7 +170,7 @@ XX <- multN(X, n = 3, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
-discreteRV also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
+\pkg{discreteRV} also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
 
 <<fairdiesofi, echo=FALSE, results='asis'>>=
 X2 <- SofIID(X, n = 2, fractions = TRUE)
@@ -176,7 +178,7 @@ print(xtable(t(data.frame(Outcome = as.character(X2), Probability = names(X2))),
 @
 
 \subsection{Plotting}
-discreteRV includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 100 independent rolls of a die is given in Figure \ref{fig:plot100}.
+\pkg{discreteRV} includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 100 independent rolls of a die is given in Figure \ref{fig:plot100}.
 
 <<plot1, echo=FALSE, fig.cap='Plot method called on a fair die random variable.', fig.align='center', fig.pos='H'>>=
 plot(X)
@@ -198,7 +200,7 @@ qqnorm(X100)
 @
 
 \section{Simulation}
-discreteRV also includes a set of functions to simulate trials from a random variable. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-sim}.
+\pkg{discreteRV} also includes a set of functions to simulate trials from a random variable. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-sim}.
 
 \begin{table}[!h]
 \centering
@@ -213,7 +215,7 @@ rsim & Simulate n independent trials from a random variable X \\
 skewSim & Skew of the empirical distribution of simulated data \\
 \hline
 \end{tabular}}
-\caption{\label{tbl:discreteRV-sim} List of the simulation functions contained in discreteRV. }
+\caption{\label{tbl:discreteRV-sim} List of the simulation functions contained in \pkg{discreteRV}. }
 \end{table}
 
 \subsection{Creation}
@@ -239,8 +241,9 @@ Prop(X.sim > 3)
 @
 
 \section{Conclusion}
-The power of discreteRV is truly in its simplicity. Because it uses familiar introductory probability syntax, it can allow students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, discreteRV also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
+The power of \pkg{discreteRV} is truly in its simplicity. Because it uses familiar introductory probability syntax, it can allow students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, \pkg{discreteRV} also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
 
+\nocite{*}
 \bibliography{references.bib}
 
 \end{article}
