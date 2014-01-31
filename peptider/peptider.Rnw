@@ -46,10 +46,9 @@ Libraries of peptides, or amino acid sequences, have a number of applications in
 This paper will focus on two distinct functional areas of peptider. The first is Library Diversity, or statistical measures of the quality of the library itself. The second is Peptide Coverage, or how likely the library is to include particularly desired peptides, or peptides that are most similar to desired peptides. Before proceeding to discuss these measures, we will first discuss the built-in library schemes, and how to define custom schemes.
 
 \subsection{Library Schemes}
-\pkg{peptider} has several built-in library schemes. The first is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon, and hence there are $4^3 = 64$ possible nucleotides. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be  \hh{one of the} three bases \hh{C, G, or T
-}, yielding 48 nucleotides. Both NNK and NNS have identical statistical properties in this analysis, with the third position restricted to two bases \hh{(G or T for NNK, and G or C for NNS, respectively)} for a total of 32 nucleotides.  Finally, there are trimer-based libraries in which the codons are pre-defined. Each of these scheme definitions can be accessed with the \code{scheme} function.
+\pkg{peptider} has several built-in library schemes. The first is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon, and hence there are $4^3 = 64$ possible nucleotides. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be one of the three bases C, G, or T, yielding 48 nucleotides. Both NNK and NNS have identical statistical properties in this analysis, with the third position restricted to two bases (G or T for NNK, and G or C for NNS, respectively) for a total of 32 nucleotides.  Finally, there are trimer-based libraries in which the codons are pre-defined. Each of these scheme definitions can be accessed with the \code{scheme} function.
 
-\hh{How do these restrictions come about? - Include a sentence on how an amino acid can have multiple codon representations, and the process during a library construction custom builds codons together from bases. It is these artificially built libraries that are of interest in the paper.}
+%\hh{How do these restrictions come about? - Include a sentence on how an amino acid can have multiple codon representations, and the process during a library construction custom builds codons together from bases. It is these artificially built libraries that are of interest in the paper.}
 <<scheme_def>>=
 scheme("NNN")
 @
@@ -62,15 +61,14 @@ nnk6 <- libscheme("NNK", k = 6)
 
 \code{libscheme} returns a list containing two elements. The first, \code{data}, describes the probability of occurrence of each possible peptide class. The second, \code{info}, describes the number of nucleotides, the number of valid nucleotides, and the scheme definition used.
 
-\hh{We also provide the possibility to define a custom library scheme as shown in Code Example 1. Describe the relevant parts in more detail. Here is where the class definition comes in for the first time. Explain it a bit. Copy as much as you have to from the peptides paper. It is OK, since this is our work, we just have to rephrase it  a bit.}
-%We can also create a custom library scheme by building a data frame of the same format as in Code Example 1. 
+%\hh{We also provide the possibility to define a custom library scheme as shown in Code Example 1. Describe the relevant parts in more detail. Here is where the class definition comes in for the first time. Explain it a bit. Copy as much as you have to from the peptides paper. It is OK, since this is our work, we just have to rephrase it  a bit.}
 This code creates a custom trimer-based library with peptides of length six.
 
 <<custom_scheme>>=
 custom <- data.frame(class = c("A", "Z"), aacids = c("SLRAGPTVIDEFHKNQYMW", "*"), c = c(1, 0))
 custom6 <- libscheme(custom, k = 6)
 @
-\hh{What elements do each of the data and info part describe? - Where do they come in?}
+%\hh{What elements do each of the data and info part describe? - Where do they come in?}
 
 Having created the library of interest, we now turn our attention to assessment of these libraries.
 
