@@ -168,7 +168,7 @@ X.sim
 
 ```
 1/6 1/6 1/6 1/6 1/6 1/6 1/6 1/6 1/6 1/6 
-  6   5   4   4   3   3   4   6   3   1 
+  2   5   2   4   1   1   3   2   5   1 
 attr(,"RV")
 random variable with 6 outcomes
 
@@ -219,6 +219,121 @@ library(peptider)
 ```
 
 
+Peptide Encoding
+========================================================
+Idea - Divide 20 amino acids into classes based on the number of codons describing each amino acid.
+
+SLRLLRS = $6^7$ = 279936 distinct codon sequences yielding this peptide
+
+MWMWMWM = $1^7$ = 1 distinct codon sequence yielding this peptide
+
+Peptide Encoding
+========================================================
+Depending on the Encoding scheme, this yields either one, three, or five classes:
+
+* NNN - A/G/C/T unrestricted in all three positions
+* NNB - First two unrestricted, third either C/G/T
+* NNK (NNS) - First two unrestricted, third either G/T (G/C)
+* trimer - Codons are pre-defined, equal probabilities for all AA
+
+Peptide Encoding (continued)
+========================================================
+
+```r
+libscheme("NNN")$info$scheme
+```
+
+```
+  class    aacids c s
+1     A       SLR 6 3
+2     B     AGPTV 4 5
+3     C         I 3 1
+4     D DEFHKNQYC 2 9
+5     E        MW 1 2
+6     Z         * 3 1
+```
+
+The probability of a single amino acid class i occurring is defined as (ignoring class Z):
+
+$c_is_i / \sum_{i=1}^n c_is_i, i \ne Z$
+
+Peptide Encoding (continued)
+========================================================
+So we can create a random variable representing the occurrence of a single amino acid class.
+
+Treating each amino acid as independent in a peptide sequence, we can use the multN function to compute the joint distribution for peptides of length k.
+
+
+```r
+head(libscheme("NNK", 6)$data, n = 4)
+```
+
+```
+                  class   di     probs
+A.A.A.A.A.A A.A.A.A.A.A  729 0.0005988
+A.A.A.A.A.B A.A.A.A.A.B 1215 0.0006653
+A.A.A.A.A.C A.A.A.A.A.C 2916 0.0007984
+A.A.A.A.B.A A.A.A.A.B.A 1215 0.0006653
+```
+
+
+Peptide Library Measures
+========================================================
+Functional Diversity - Measure of diversity where 1 is a library in which each peptide has the same probability of occurrence, which drops towards zero for increasingly skewed distributions 
+
+$D(N, k) = \sum_{i=1}^{v^k}b_i(1 - e^{-Np_i/b_i})$
+
+
+```r
+makowski(4, "NNK")
+```
+
+```
+[1] 0.4399
+```
+
+
+Peptide Library Measures (continued)
+========================================================
+Expected Coverage - The expected proportion of all possible peptides of length k included in the library.
+
+$C(N, k) = D(N, k)/c^k$
+
+
+```r
+coverage(4, "NNK", N = 10^5)
+```
+
+```
+[1] 0.3532
+```
+
+
 PeLiCa
 ========================================================
 Shiny-based web-frontend to peptider
+
+Available at http://www.pelica.org
+
+Development version available at http://erichare.shinyapps.io/pelica
+
+Features
+========================================================
+* Full-featured frontend for peptider
+* Use pre-built library schemes or create a custom scheme
+* Textual and graphical visualization of library properties
+* Supports peptide lengths six through ten, library sizes up to $9.9 \times 10^{15}$
+
+PeLiCa - Live Demo
+========================================================
+
+Conclusion
+========================================================
+PeLiCa is powerful and easy to use...
+
+... But this was only possible because of the modular nature of the components it builds upon.
+![The layers of my project](figure/CC_Drawing_1.png)
+
+Thank You
+========================================================
+Any questions?
