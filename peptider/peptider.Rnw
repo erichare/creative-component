@@ -114,7 +114,7 @@ results.dframe <- ddply(dframe, .(Scheme, Size), function(row){
 names(results.dframe)[3] <- "Coverage"
 @
 
-<<coverage_plot,fig.width=6, fig.height=4, out.width='0.7\\textwidth', message=FALSE, fig.align="center", fig.cap="Overview of coverage rates across different hexapeptide library schemes of varying size.">>=
+<<coverage_plot,fig.width=7, fig.height=5, out.width='0.7\\textwidth', message=FALSE, fig.align="center", fig.cap="Overview of coverage rates across different hexapeptide library schemes of varying size.">>=
 qplot(Size, Coverage, data = results.dframe, geom = "line", colour = Scheme, size = I(1.5)) + 
     scale_x_log10(breaks = 10^(6:10), labels = expression(10^6, 10^7, 10^8, 10^9, 10^10)) + 
     theme(legend.position = "bottom") 
