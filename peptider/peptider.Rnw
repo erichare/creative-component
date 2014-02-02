@@ -34,7 +34,7 @@ Peptide libraries have important theoretical and practical applications in the f
 @
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
-    suppressWarning(library(peptider))
+    suppressWarnings(library(peptider))
     library(ggplot2)
 @
 
@@ -157,7 +157,7 @@ my_lib <- libscheme("NNK", 6)
 summary(detect(my_lib, 10^7))
 @
 
-<<detectplot, fig.width=4.5, fig.height=4>>=
+<<detectplot, fig.width=4.5, fig.height=4, message=FALSE>>=
 qplot(detect(my_lib, 10^7), weight = di, geom = "histogram", data = my_lib$data) +
     xlab("Inclusion Probability") +
     ylab("Count")
