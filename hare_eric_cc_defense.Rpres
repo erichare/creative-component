@@ -172,9 +172,15 @@ head(libscheme("NNK", 6)$data, n = 4)
 
 Peptide Library Measures
 ========================================================
-Functional Diversity - Measure of diversity where 1 is a library in which each peptide has the same probability of occurrence, which drops towards zero for increasingly skewed distributions 
+Diversity - Expected # of unique peptides in the library.
 
 $D(N, k) = \sum_{i=1}^{v^k}b_i(1 - e^{-Np_i/b_i})$
+
+```{r}
+diversity(4, "NNK", N = 10^4)
+```
+
+Makowski Diversity - Measure of diversity where 1 is a library in which each peptide has the same probability
 
 ```{r}
 makowski(4, "NNK")
@@ -187,7 +193,19 @@ Expected Coverage - The expected proportion of all possible peptides of length k
 $C(N, k) = D(N, k)/c^k$
 
 ```{r}
-coverage(4, "NNK", N = 10^5)
+coverage(4, "NNK", N = 10^4)
+diversity(4, "NNK", N = 10^4) / 20^4
+```
+
+Peptide Library Measures (continued)
+========================================================
+Relative Efficiency - Ratio of expected peptide diversity to the total number of peptides in the library.
+
+$R(N, k) = D(N, k)/N$
+
+```{r}
+efficiency(4, "NNK", N = 10^4)
+diversity(4, "NNK", N = 10^4) / 10^4
 ```
 
 PeLiCa
