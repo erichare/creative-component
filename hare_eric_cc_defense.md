@@ -168,7 +168,7 @@ X.sim
 
 ```
 1/6 1/6 1/6 1/6 1/6 1/6 1/6 1/6 1/6 1/6 
-  2   1   6   2   4   1   1   4   1   1 
+  3   6   1   1   6   3   2   4   5   3 
 attr(,"RV")
 random variable with 6 outcomes
 
@@ -227,7 +227,7 @@ SLRLLRS = $6^7$ = 279936 distinct codon sequences yielding this peptide
 
 MWMWMWM = $1^7$ = 1 distinct codon sequence yielding this peptide
 
-Peptide Encoding
+Peptide Encoding (continued)
 ========================================================
 Depending on the Encoding scheme, this yields either one, three, or five classes:
 
@@ -353,13 +353,57 @@ diversity(4, "NNK", N = 10^4) / 10^4
 ```
 
 
+A New Peptide Encoding
+========================================================
+The old encoding computes a joint distribution for every possible peptide. 
+
+But we know by independence the probability of obtaining a peptide HENNING is the same as a peptide EHNNING - The amino acids are simply rearranged.
+
+Idea: Encode a peptide by a *count* of amino acids, and store number of possible permutations.
+
+A New Peptide Encoding (continued)
+========================================================
+
+```r
+peptider:::libscheme_new("NNK", k = 3)$data
+```
+
+```
+   class   di choices   probs
+1  3,0,0   27       1 0.02447
+2  2,1,0   45       3 0.02719
+3  1,2,0   75       3 0.03021
+4  0,3,0  125       1 0.03357
+5  2,0,1  108       3 0.03263
+6  1,1,1  180       6 0.03625
+7  0,2,1  300       3 0.04028
+8  1,0,2  432       3 0.04350
+9  0,1,2  720       3 0.04834
+10 0,0,3 1728       1 0.05800
+```
+
+
+A New Peptide Encoding (continued)
+========================================================
+This allows for much faster computations, even for large peptides.
+
+
+```r
+peptider:::coverage_new("NNK", k = 18, N = 10^24)
+```
+
+```
+[1] 0.4012
+```
+
+
 PeLiCa
 ========================================================
 Shiny-based web-frontend to peptider
 
 Available at http://www.pelica.org
 
-Development version available at http://erichare.shinyapps.io/pelica
+Development version available at http://erichare.shinyapps.io/pelica - Uses the new peptide encoding.
 
 Features
 ========================================================
