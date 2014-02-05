@@ -29,6 +29,11 @@ discreteRV
 ========================================================
 Manipulation of Discrete Random Variables
 
+* Based on idea and code by Andreas Buja (Wharton School of Business)
+* My contribution: additional functionality, packaging, documentation, and write-up 
+
+
+
 Installing discreteRV
 ========================================================
 discreteRV is available on CRAN (stable) and GitHub (development)
@@ -46,11 +51,12 @@ install_github("discreteRV", "erichare")
 library(discreteRV)
 ```
 
+
 Creating discrete random variables
 ========================================================
 Let X be a random variable representing a single toss of a fair die. X takes on the values 1 to 6 with probability $\frac{1}{6}$
 
-$P(X = x) = \frac{1}{6} x \in {1, 2, 3, 4, 5, 6}$
+$P(X = x) = \frac{1}{6} \ \ \ \ x \in \{1, 2, 3, 4, 5, 6\}$
 
 In discreteRV,
 
