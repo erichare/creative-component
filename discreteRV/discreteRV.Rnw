@@ -104,8 +104,9 @@ discreteRV & Casella and Berger \\
 \code{E(X)} & E(X) \\
 \code{P(X == x)} & $P(X = x)$ \\
 \code{P(X >= x)} & $P(X \ge x)$ \\
-\code{P(X < x1 \& X > x2)} & $P(X < x_1 \cap X > x_2)$ \\
-\code{P(X < x1 | X > x2)} & $P(X < x_1 \cup X > x_2)$ \\
+\code{P((X < x1) \%AND\% (X > x2))} & $P(X < x_1 \cap X > x_2)$ \\
+\code{P((X < x1) \%OR\% (X > x2))} & $P(X < x_1 \cup X > x_2)$ \\
+\code{P((X == x1) | (X > x2))} & $P(X < x_1 | X > x_2)$ \\
 \code{probs(X)} & $f(x)$ \\
 \code{SD(X)} & $sd(X)$ \\
 \code{V(X)} & $var(X)$ \\
@@ -148,7 +149,9 @@ names(X)
 
 \subsection{Probabilities}
 
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code {$P(X > 1)$}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$.
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code \code{P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$, using the \code{\%OR\%} and \code{\%AND\%} operators.
+
+In addition, conditional probabilities are also supported. For instance, to calculate the probability of obtaining a roll of one given that the roll is no more than 3, you would use the code \code{P(X == 1 | X <= 3)}. The use of the pipe operator may be less intuitive to the seasoned R programmer, but overcomes a major notational issue in that conditional probabilities are most commonly specified with the pipe. This issue led to the creation of the \code{\%OR\%} and \code{\%AND\%} operators specified previously.
 
 Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}.
 
