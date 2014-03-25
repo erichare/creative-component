@@ -41,6 +41,7 @@ A major issue in statistics education is the sometimes large disparity between t
     #install_github("discreteRV", "erichare")
 
     suppressWarnings(library(discreteRV))
+    library(MASS)
 @
 
 \section{Introduction}
@@ -115,7 +116,7 @@ discreteRV & Casella and Berger \\
 \end{table}
 
 \subsection{Creating random variables}
-The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable $X$ is defined \citep[see e.g.~][]{ws:1999} as a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a special case that can only take on a countable set of values. \hh{Here, we wil make the additional constraint to only allow a finite number of values. In practice, this constraint has minimal impact. } Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiment to probabilities which must sum to one. Throughout this document, we will work with a simple example of a discrete random variable representing the value of a roll of a fair die. Formally, we can define such a random variable and its probability mass function as follows:
+The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable $X$ is defined \citep[see e.g.~][]{ws:1999} as a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a special case that can only take on a countable set of values. Here, we will make the additional constraint to only allow a finite number of values. In practice, this constraint has minimal impact. Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiment to probabilities which must sum to one. Throughout this document, we will work with a simple example of a discrete random variable representing the value of a roll of a fair die. Formally, we can define such a random variable and its probability mass function as follows:
 
 Let $X$ be a random variable representing a single roll of a fair die. Then,
 
@@ -128,11 +129,18 @@ Let $X$ be a random variable representing a single roll of a fair die. Then,
    \right.
 \end{displaymath} \\
 
-In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of probabilities and a vector of outcome values, and returns an \code{RV} object. Consider our example of an RV object \code{X} which we will use to represent a single roll of a fair die. The code to create such a random variable is as follows:
+In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of outcomes, a vector of probabilities, and returns an \code{RV} object. Consider our example of an RV object \code{X} which we will use to represent a single roll of a fair die. The code to create such a random variable is as follows:
 
-<<makeRV>>=
-X <- make.RV(vals = 1:6, probs = rep("1/6", times = 6))
+<<makeRV, message=FALSE>>=
+X <- make.RV(outcomes = 1:6, probs = rep("1/6", times = 6), fractions = TRUE)
 X
+@
+
+The make.RV function also allows the definition of a random variable in terms of odds. One can construct a loaded die in which a roll of one is four times as likely as any other roll with code like:
+
+<<makeRVodds>>=
+X.loaded <- make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1))
+X.loaded
 @
 
 \subsection{Structure}
@@ -163,21 +171,21 @@ Aside from moments and probability statements, \pkg{discreteRV} includes a power
 library(xtable)
 
 XX <- multN(X, fractions = TRUE)
-print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(as.numeric(names(XX))))))[,1:8], label = "tbl:fairdiemult", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
 <<fairdiemult3, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
 
 XX <- multN(X, n = 3, fractions = TRUE)
-print(xtable(t(data.frame(Outcome = as.character(XX), Probability = names(XX)))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(as.numeric(names(XX))))))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
-\pkg{discreteRV} also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)} would create a random variable object with the representation given in \ref{tbl:fairdiesofi}
+\pkg{discreteRV} also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)} would create a random variable object with the representation given in Table \ref{tbl:fairdiesofi}
 
 <<fairdiesofi, echo=FALSE, results='asis'>>=
 X2 <- SofIID(X, n = 2, fractions = TRUE)
-print(xtable(t(data.frame(Outcome = as.character(X2), Probability = names(X2))), label = "tbl:fairdiesofi", caption = "Outcomes and their associated Probabilities for a variable representing the sum of two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+print(xtable(t(data.frame(Outcome = as.character(X2), Probability = as.character(fractions(as.numeric(names(X2)))))), label = "tbl:fairdiesofi", caption = "Outcomes and their associated Probabilities for a variable representing the sum of two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
 \subsection{Plotting}
