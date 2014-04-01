@@ -48,13 +48,13 @@ A major issue in statistics education is the sometimes large disparity between t
 
 One of the primary hurdles in teaching probability courses in an undergraduate setting is the missing link between theoretical statements from textbooks and lectures, and the notation used in statistical software required in more and more classes. Depending on the background of the student, this missing link can manifest itself in a couple of different ways. Some students will master the theoretical concepts and notation, but struggle in a computing environment. Others will feel very comfortable with statistical programming, but sometimes struggle to translate that back to the classroom probability setting.
 
-\pkg{discreteRV} is an attempt to bridge this gap. It provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. It uses syntax which in most cases closely matches probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN).
+\pkg{discreteRV} is an attempt to bridge this gap. It provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. \pkg{discreteRV} is designed for introductory probability courses. It uses syntax which in most cases closely matches probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN).
 
 The functions of \pkg{discreteRV} are organized into two logical areas, termed probabilities and simulations.
 
 \section{Probabilities}
 
-\pkg{discreteRV} includes a suite of functions to create, manipulate, and compute distributional quantities for the random variables defined. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}. In Table \ref{tbl:discreteRV-connect}, the notational similarities between \pkg{discreteRV} and the commonly used book by \cite{cb:2001} is shown. 
+\pkg{discreteRV} includes a suite of functions to create, manipulate, and compute distributional quantities for discrete random variables. A list of these functions and brief discriptions of their functionality is available in Table \ref{tbl:discreteRV-probs}.
 
 \begin{table}
 \centering
@@ -96,6 +96,60 @@ Methods \\
 \caption{\label{tbl:discreteRV-probs} Overview of functions provided in \pkg{discreteRV} ordered by topics.}
 \end{table}
 
+\subsection{Creating random variables}
+The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable $X$ is defined \citep[see e.g.~][]{ws:1999} as a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a special case that can only take on a countable set of values. Here, we will make the additional constraint to only allow a finite number of values. In practice, this constraint has minimal impact. Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiment to probabilities. Probability mass functions must therefore define probabilities which are between zero and one, and must sum to one. 
+
+Throughout this document, we will work with two random variables, a simple example of a discrete random variable representing the value of a roll of a fair die, and  one representing a realization of a Poisson random variable with mean parameter equal to two. Formally, we can define such random variables and their probability mass functions as follows:
+
+Let $X$ be a random variable representing a single roll of a fair die; i.e., the sample space $\Omega = \{1, 2, 3, 4, 5, 6\}$ and $X$ is the identity, mapping the upturned face of a die roll to the corresponding number of dots visible. Then,
+
+\begin{displaymath}
+   f(x) = P(X = x) = \left\{
+     \begin{array}{lr}
+       \frac{1}{6} & x \in {1, 2, 3, 4, 5, 6}\\
+       0 & \text{otherwise}
+     \end{array}
+   \right.
+\end{displaymath} \\
+
+Let $Y$ be a random variable distributed according to a Poisson distribution with mean parameter $\lambda$. In this case, the sample space $\Omega = \{0, 1, 2, ... \}$ (the non-negative integers). Then,
+
+\begin{displaymath}
+   f(y) = P(Y = y) = \left\{
+     \begin{array}{lr}
+       \frac{\lambda^y e^{-\lambda}}{y!} & y \in {0, 1, 2, ...}\\
+       0 & \text{otherwise}
+     \end{array}
+   \right.
+\end{displaymath} \\
+
+In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of outcomes, a vector of probabilities, and returns an \code{RV} object. The code to create X, a random variable representing the roll of a fair die, is as follows:
+
+<<makeRV>>=
+X <- make.RV(outcomes = 1:6, probs = 1/6)
+X
+@
+
+Outcomes can be specified as a range of values, which is useful for distributions in which the outcomes that can occur with non-zero probability are unbounded. This can be indicated with the \code{range} parameter, which defaults to TRUE in the event that the range of values includes positive or negative infinity. To define our poisson random variable Y, we specify the outcomes as a range and the probabilities as a function:
+
+<<makeRVpois>>=
+pois.func <- function(y, lambda = 2) { return(lambda^y * exp(-lambda) / factorial(y)) }
+
+Y <- make.RV(outcomes = c(0, Inf), probs = pois.func)
+Y
+@
+
+The make.RV function also allows the definition of a random variable in terms of odds. One can construct a loaded die in which a roll of one is four times as likely as any other roll as:
+
+<<makeRVodds>>=
+X.loaded <- make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1))
+X.loaded
+@
+
+\subsection{Structure of an RV Object}
+
+The syntactic structure of the included functions lends itself both to a natural presentation of elementary probabilities and properties of probability mass functions in an introductory probability course, as well as more advanced modeling of discrete random variables. In Table \ref{tbl:discreteRV-connect}, we provide an overview of the notational similarities between \pkg{discreteRV} and the commonly used probability textbook by \cite{cb:2001}
+
 \begin{table}
 \centering
 \scalebox{0.95}{
@@ -115,51 +169,26 @@ discreteRV & Casella and Berger \\
 \caption{\label{tbl:discreteRV-connect} Probability functions in \pkg{discreteRV} and their corresponding syntax in introductory statistics courses.}
 \end{table}
 
-\subsection{Creating random variables}
-The centerpiece of \pkg{discreteRV} is a set of functions to create and manipulate discrete random variables. A random variable $X$ is defined \citep[see e.g.~][]{ws:1999} as a theoretical construct representing the value of an outcome of a random experiment. A discrete random variable is a special case that can only take on a countable set of values. Here, we will make the additional constraint to only allow a finite number of values. In practice, this constraint has minimal impact. Discrete random variables are associated with probability mass functions, which map the set of possible outcomes of the random experiment to probabilities which must sum to one. Throughout this document, we will work with a simple example of a discrete random variable representing the value of a roll of a fair die. Formally, we can define such a random variable and its probability mass function as follows:
+A random variable object is constructed by defining a standard R vector to be the possible outcomes that the random variable can take (the sample space $\Omega$). It is preferred, though not required, that these be encoded as integers, since this allows the computation expected values, variances, and other distributional properties. This vector of outcomes then stores attributes which include the probability of each outcome. By default, the print method for a random variable will display the probabilities as fractions in most cases, aiding in readability. The probabilities can be retrieved as a numeric vector by using the \code{probs} function:
 
-Let $X$ be a random variable representing a single roll of a fair die. Then,
-
-\begin{displaymath}
-   f(x) = P(X = x) = \left\{
-     \begin{array}{lr}
-       \frac{1}{6} & x \in {1, 2, 3, 4, 5, 6}\\
-       0 & \text{otherwise}
-     \end{array}
-   \right.
-\end{displaymath} \\
-
-In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of outcomes, a vector of probabilities, and returns an \code{RV} object. Consider our example of an RV object \code{X} which we will use to represent a single roll of a fair die. The code to create such a random variable is as follows:
-
-<<makeRV, message=FALSE>>=
-X <- make.RV(outcomes = 1:6, probs = rep("1/6", times = 6), fractions = TRUE)
-X
+<<probs>>=
+probs(X)
 @
 
-The make.RV function also allows the definition of a random variable in terms of odds. One can construct a loaded die in which a roll of one is four times as likely as any other roll with code like:
+\subsection{Probability-based Calculations}
 
-<<makeRVodds>>=
-X.loaded <- make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1))
-X.loaded
+By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code \code{P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$, using the \code{\%OR\%} and \code{\%AND\%} operators. Consider our Poisson random variable $Y$, and suppose we want to obtain the probability that $Y$ is with a distance $\delta$ of its mean parameter $\lambda = 2$:
+
+<<poisexample>>=
+delta <- 3
+lambda <- 2
+
+P((Y >= lambda - delta) %AND% (Y <= lambda + delta))
 @
-
-\subsection{Structure}
-
-The syntactic structure of the included functions lends itself both to a natural presentation in an introductory probability course, as well as more advanced modeling of discrete random variables. The object is constructed by setting a standard R vector object to the possible values that the random variable can take (the sample space). It is preferred, though not required, that these be encoded as integers, since this allows to compute expected values, variances, and other distributional properties. This vector of outcomes is then named by the respective probability of each outcome. The probability can be encoded as a string, such as ``1/6", if this aids in readability, but the string must be coercable to a numeric.
-
-Note that although the print method does not illustrate the inherent structure of the object, the probabilities (1/6, for each of the 6 outcomes of the die roll) are actually stored in the attributes of the object \code{X}.
-
-<<fairdienames>>=
-attr(X, "probs")
-@
-
-\subsection{Probabilities}
-
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code \code{P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$, using the \code{\%OR\%} and \code{\%AND\%} operators.
 
 In addition, conditional probabilities are also supported. For instance, to calculate the probability of obtaining a roll of one given that the roll is no more than 3, you would use the code \code{P(X == 1 | X <= 3)}. The use of the pipe operator may be less intuitive to the seasoned R programmer, but overcomes a major notational issue in that conditional probabilities are most commonly specified with the pipe. This issue led to the creation of the \code{\%OR\%} and \code{\%AND\%} operators specified previously.
 
-Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}.
+Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}. The expected value for a poisson random variable is its mean, and hence \code{E(Y)} will return two.
 
 \subsection{Joint Distributions}
 
@@ -187,25 +216,25 @@ print(xtable(t(data.frame(Outcome = as.character(X2), Probability = as.character
 @
 
 \subsection{Plotting}
-\pkg{discreteRV} includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 100 independent rolls of a die is given in Figure \ref{fig:plot100}.
+\pkg{discreteRV} includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 20 independent rolls of a die is given in Figure \ref{fig:plot20}.
 
 <<plot1, echo=FALSE, fig.cap='Plot method called on a fair die random variable.', fig.align='center', fig.pos='H'>>=
 plot(X)
 @
 
-<<plot2, echo=FALSE, fig.cap='Plot method called on a sum of two fair die random variable.', fig.align='center', fig.pos='H'>>=
+<<plot2, echo=FALSE, fig.cap='Plot method called on a sum of two fair die random variables.', fig.align='center', fig.pos='H'>>=
 plot(X2)
 @
 
-<<plot100, echo=FALSE, fig.cap='Plot method called on a sum of 100 fair die random variable.', fig.align='center', fig.pos='H'>>=
-X100 <- SofIID(X, n = 100, progress = FALSE, fractions = FALSE)
-plot(X100)
+<<plot20, echo=FALSE, fig.cap='Plot method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H'>>=
+X20 <- SofIID(X, n = 20, progress = FALSE)
+plot(X20)
 @
 
 In addition to a plotting method, there is also a method for \code{qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}.
 
-<<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 100 fair die random variable.', fig.align='center', fig.pos='H'>>=
-qqnorm(X100)
+<<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H'>>=
+qqnorm(X20)
 @
 
 \section{Simulation}
