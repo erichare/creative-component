@@ -153,7 +153,7 @@ The syntactic structure of the included functions lends itself both to a natural
 \begin{table}
 \centering
 \scalebox{0.95}{
-\begin{tabular}{lp{0.8\textwidth}}\hline
+\begin{tabular}{lp{0.6\textwidth}}\hline
 discreteRV & Casella and Berger \\ 
 \hline
 \code{E(X)} & E(X) \\
@@ -218,22 +218,22 @@ print(xtable(t(data.frame(Outcome = as.character(X2), Probability = as.character
 \subsection{Plotting}
 \pkg{discreteRV} includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 20 independent rolls of a die is given in Figure \ref{fig:plot20}.
 
-<<plot1, echo=FALSE, fig.cap='Plot method called on a fair die random variable.', fig.align='center', fig.pos='H'>>=
+<<plot1, echo=FALSE, fig.cap='Plot method called on a fair die random variable.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 plot(X)
 @
 
-<<plot2, echo=FALSE, fig.cap='Plot method called on a sum of two fair die random variables.', fig.align='center', fig.pos='H'>>=
+<<plot2, echo=FALSE, fig.cap='Plot method called on a sum of two fair die random variables.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 plot(X2)
 @
 
-<<plot20, echo=FALSE, fig.cap='Plot method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H'>>=
+<<plot20, echo=FALSE, fig.cap='Plot method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 X20 <- SofIID(X, n = 20, progress = FALSE)
 plot(X20)
 @
 
 In addition to a plotting method, there is also a method for \code{qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}.
 
-<<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H'>>=
+<<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 qqnorm(X20)
 @
 
@@ -285,8 +285,8 @@ Craps is a common card game played in casinos. The game begins with what is call
 
 <<craps1>>=
 X <- make.RV(outcomes = 1:6, probs = 1/6)
-X2 <- SofIID(X, n = 2)
-X2
+roll <- SofIID(X, n = 2)
+roll
 @
 
 Recall that the game ends after the first roll if and only if a seven or eleven is obtained (resulting in a win), or a two, three, or twelve is obtained (resulting in a loss). Hence, we calculate the probability that the game ends after the first roll as follows:
@@ -295,24 +295,29 @@ Recall that the game ends after the first roll if and only if a seven or eleven 
 win_rolls <- c(7, 11)
 loss_rolls <- c(2, 3, 12)
 
-P(X2 %in% c(win_rolls, loss_rolls))
+end_rolls <- c(win_rolls, loss_rolls)
+
+P(roll %in% end_rolls)
 @
 
 Now suppose we would like to condition on the game having ended after the first roll. Using the conditional probability operator in \pkg{discreteRV}, we can obtain the probabilities of winning and losing given that the game ended after the first roll:
 
 <<craps3>>=
-P(X2 %in% win_rolls | X2 %in% c(win_rolls, loss_rolls))
-P(X2 %in% loss_rolls | X2 %in% c(win_rolls, loss_rolls))
+P(roll %in% win_rolls | roll %in% end_rolls)
+P(roll %in% loss_rolls | roll %in% end_rolls)
 @
 
 Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{multN} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have possible outcomes ($11^2$), and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls, which is approximately 30\%.
 
 <<craps4>>=
-X22 <- multN(X2, 2)
-winning_outcomes <- c(paste(7, 2:12, sep = ","), paste(11, 2:12, sep = ","), paste(4:10, 4:10, sep = ","))
+two_rolls <- multN(roll, 2)
+
+winning_outcomes <- c(paste(7, 2:12, sep = ","), # Seven on the first roll
+                      paste(11, 2:12, sep = ","), # Eleven on the first roll
+                      paste(4:10, 4:10, sep = ",")) # Pair between four and ten
 winning_outcomes
 
-P(X22 %in% winning_outcomes)
+P(two_rolls %in% winning_outcomes)
 @
 
 Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine in order to test this. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable representing the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times. The results indicate that the player wins a game of craps approximately 49\% of the time.
@@ -334,8 +339,8 @@ craps_game <- function(RV) {
     }
 }
 
-sim.results <- replicate(1000, sum(replicate(100, craps_game(X2))))
-(emp.prob <- mean(sim.results / 100))
+sim.results <- replicate(5000, sum(replicate(1000, craps_game(roll))))
+(emp.prob <- mean(sim.results / 1000))
 @
 
 \section{Conclusion}
