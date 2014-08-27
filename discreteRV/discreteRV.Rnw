@@ -16,13 +16,13 @@
 \volume{XX}
 \volnumber{YY}
 \year{2014}
-\month{AAAA}
+\month{September}
 
 %% replace RJtemplate with your article
 \begin{article}
 
 \title{Manipulation of Discrete Random Variables with discreteRV}
-\author{by Eric Riemer Hare, Andreas Buja, and Heike Hofmann}
+\author{by Eric Hare, Andreas Buja, and Heike Hofmann}
 
 \maketitle
 
@@ -305,7 +305,7 @@ P(X2 %in% win_rolls | X2 %in% c(win_rolls, loss_rolls))
 P(X2 %in% loss_rolls | X2 %in% c(win_rolls, loss_rolls))
 @
 
-Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{multN} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have possible outcomes ($11^2$), and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls:
+Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{multN} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have possible outcomes ($11^2$), and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls, which is approximately 30\%.
 
 <<craps4>>=
 X22 <- multN(X2, 2)
@@ -315,7 +315,7 @@ winning_outcomes
 P(X22 %in% winning_outcomes)
 @
 
-Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine in order to test this. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable representing the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times:
+Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine in order to test this. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable representing the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times. The results indicate that the player wins a game of craps approximately 49\% of the time.
 
 <<craps5>>=
 craps_game <- function(RV) {    
@@ -335,14 +335,14 @@ craps_game <- function(RV) {
 }
 
 sim.results <- replicate(1000, sum(replicate(100, craps_game(X2))))
-mean(sim.results / 100)
+(emp.prob <- mean(sim.results / 100))
 @
 
 \section{Conclusion}
 The power of \pkg{discreteRV} is truly in its simplicity. Because it uses familiar introductory probability syntax, it can allow students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, \pkg{discreteRV} also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
 
 \nocite{*}
-\bibliography{references.bib}
+\bibliography{references}
 
 \end{article}
 
