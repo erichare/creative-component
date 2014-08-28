@@ -27,7 +27,7 @@
 \maketitle
 
 \abstract{
-A major issue in statistics education is the sometimes large disparity between the mathematical and theoretical coursework, and the computational coursework. \pkg{discreteRV} is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to that which is found in introductory probability courses. It is simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, I introduce and motivate \pkg{discreteRV}, describe its functionality, and provide reproducible examples illustrating its use.
+A major issue in statistics education is the sometimes large disparity between the mathematically intensive theoretical coursework, and the computational coursework. \pkg{discreteRV} is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to the mathematical notation in introductory probability courses. The package uses function that are simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, we introduce and motivate \pkg{discreteRV}, describe its functionality, and provide reproducible examples illustrating its use.
 }
 
 <<concordance, echo=FALSE>>=
@@ -46,9 +46,9 @@ A major issue in statistics education is the sometimes large disparity between t
 
 \section{Introduction}
 
-One of the primary hurdles in teaching probability courses in an undergraduate setting is the missing link between theoretical statements from textbooks and lectures, and the notation used in statistical software required in more and more classes. Depending on the background of the student, this missing link can manifest itself in a couple of different ways. Some students will master the theoretical concepts and notation, but struggle in a computing environment. Others will feel very comfortable with statistical programming, but sometimes struggle to translate that back to the classroom probability setting.
+One of the primary hurdles in teaching probability courses in an undergraduate setting is the missing link between theoretical notation from textbooks and lectures, and the statements used in statistical software required in more and more classes. Depending on the background of the student, this missing link can manifest itself differently: some students  master  theoretical concepts and notation, but struggle with the computing environment, while others are very comfortable with statistical programming, but find it difficult to translate their knowledge back to the theoretical setting of the classroom.
 
-\pkg{discreteRV} is an attempt to bridge this gap. It provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. \pkg{discreteRV} is designed for introductory probability courses. It uses syntax which in most cases closely matches probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN).
+\pkg{discreteRV} is an attempt to bridge this gap. The package provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. It is designed for introductory probability courses. \pkg{discreteRV} uses syntax that closely matches the notation of standard probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN).
 
 The functions of \pkg{discreteRV} are organized into two logical areas, termed probabilities and simulations.
 
@@ -106,7 +106,7 @@ Let $X$ be a random variable representing a single roll of a fair die; i.e., the
 \begin{displaymath}
    f(x) = P(X = x) = \left\{
      \begin{array}{lr}
-       \frac{1}{6} & x \in {1, 2, 3, 4, 5, 6}\\
+       1/6 & x \in {1, 2, 3, 4, 5, 6}\\
        0 & \text{otherwise}
      \end{array}
    \right.
