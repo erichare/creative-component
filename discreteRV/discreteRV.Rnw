@@ -169,7 +169,7 @@ discreteRV & Casella and Berger \\
 \caption{\label{tbl:discreteRV-connect} Probability functions in \pkg{discreteRV} and their corresponding syntax in introductory statistics courses.}
 \end{table}
 
-A random variable object is constructed by defining a standard R vector to be the possible outcomes that the random variable can take (the sample space $\Omega$). It is preferred, though not required, that these be encoded as integers, since this allows the computation expected values, variances, and other distributional properties. This vector of outcomes then stores attributes which include the probability of each outcome. By default, the print method for a random variable will display the probabilities as fractions in most cases, aiding in readability. The probabilities can be retrieved as a numeric vector by using the \code{probs} function:
+A random variable object is constructed by defining a standard R vector to be the possible outcomes that the random variable can take (the sample space $\Omega$). It is preferred, though not required, that these be encoded as integers, since this allows the computation of expected values, variances, and other distributional properties. This vector of outcomes then stores attributes which include the probability of each outcome. By default, the print method for a random variable will display the probabilities as fractions in most cases, aiding in readability. The probabilities can be retrieved as a numeric vector by using the \code{probs} function:
 
 <<probs>>=
 probs(X)
@@ -177,7 +177,7 @@ probs(X)
 
 \subsection{Probability-based Calculations}
 
-By storing the outcomes as the principle component of the object X, we can now make a number of probability statements in R. For instance, we can ask what the probability of obtaining a roll greater than 1 is by using the code \code{P(X > 1)}. R will check which values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and then we can encode a function P to compute the probability of this occurrence by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$, using the \code{\%OR\%} and \code{\%AND\%} operators. Consider our Poisson random variable $Y$, and suppose we want to obtain the probability that $Y$ is with a distance $\delta$ of its mean parameter $\lambda = 2$:
+By storing the outcomes as the principle component of the object X, we can  make a number of probability statements in R. For instance, we can calculate  the probability of obtaining a roll greater than 1  by using the code \code{P(X > 1)}. R will check which of the values in  vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and we compute the probability of this occurrence in function P  by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$, using the \code{\%OR\%} and \code{\%AND\%} operators. Consider our Poisson random variable $Y$, and suppose we want to obtain the probability that $Y$ is within a distance $\delta$ of its mean parameter $\lambda = 2$:
 
 <<poisexample>>=
 delta <- 3
@@ -185,14 +185,25 @@ lambda <- 2
 
 P((Y >= lambda - delta) %AND% (Y <= lambda + delta))
 @
+Alternatively, we could have also used the slightly more complicated looking expression:
+<<poisexample.alt>>=
+P( (Y-lambda)^2 <= delta^2)
+@
 
-In addition, conditional probabilities are also supported. For instance, to calculate the probability of obtaining a roll of one given that the roll is no more than 3, you would use the code \code{P(X == 1 | X <= 3)}. The use of the pipe operator may be less intuitive to the seasoned R programmer, but overcomes a major notational issue in that conditional probabilities are most commonly specified with the pipe. This issue led to the creation of the \code{\%OR\%} and \code{\%AND\%} operators specified previously.
+Conditional probabilities often provide a massive hurdle for students of introductory probability classes. These type of questions often make it necessary to first translate the problem from everyday language into the mathematical concept of conditional probability, e.g.~what is the probability that you will not need an umbrella when the weather forecast said it was not going to rain? 
+%It is at this point that probabilistic intuition often breaks down, and students have to rely on applying  elementary probabilistic statements correctly to derive solutions.
+Similarly, what is the probability that a die shows a one, if we already know that the roll is no more than 3?
+The mathematical solution is, of course, $P(X=1 \mid X \le 3)$. In \pkg{discreteRV} this translates directly to a solution of \code{P(X == 1 | X <= 3)}. The use of the pipe operator may be less intuitive to the seasoned R programmer, but overcomes a major notational issue in that conditional probabilities are most commonly specified with the pipe. Using the pipe for conditional probablity, we had to create alternative \code{\%OR\%} and \code{\%AND\%} operators, as specified previously.
 
-Several other distributional quantities are computable, including the expected value and the variance of a random variable. As in notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}. The expected value for a poisson random variable is its mean, and hence \code{E(Y)} will return two.
+We can compute several other distributional quantities, including the expected value and the variance of a random variable. In notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}. The expected value for a poisson random variable is its mean, and hence \code{E(Y)} in our example will return the value two. The function \code{V(X)} computes the variance of  random variable X. Alternatively, we can also work from first principles and assure ourselves that the expression \code{E( (X-E(X))\^{ }2 )} provides the same result:
+<<variance>>=
+V(X)
+E( (X-E(X))^2 )
+@
 
 \subsection{Joint Distributions}
 
-Aside from moments and probability statements, \pkg{discreteRV} includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives an the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes are encoded by the outcomes on each trial separated by a period.
+Aside from moments and probability statements, \pkg{discreteRV} includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes of the joint distribution are encoded by the outcomes on each trial separated by a period.
 
 <<fairdiemult, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
@@ -208,7 +219,7 @@ XX <- multN(X, n = 3, fractions = TRUE)
 print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(attr(XX, "probs")))))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
-\pkg{discreteRV} also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)} would create a random variable object with the representation given in Table \ref{tbl:fairdiesofi}
+\pkg{discreteRV} also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)}  creates a random variable object for the sum of two fair dice as shown in Table \ref{tbl:fairdiesofi}
 
 <<fairdiesofi, echo=FALSE, results='asis'>>=
 X2 <- SofIID(X, n = 2, fractions = TRUE)
@@ -216,7 +227,7 @@ print(xtable(t(data.frame(Outcome = as.character(X2), Probability = as.character
 @
 
 \subsection{Plotting}
-\pkg{discreteRV} includes a \code{plot} method for random variable objects so that a visualization of the outcomes and probabilities can be made simply by calling \code{plot(X)}. The result of plotting the random variable representing a fair die is given in Figure \ref{fig:plot1}. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. The result of plotting a random variable representing the sum of two independent rolls of a die is given in Figure \ref{fig:plot2}. The result of plotting a random variable representing the sum of 20 independent rolls of a die is given in Figure \ref{fig:plot20}.
+\pkg{discreteRV} includes a \code{plot} method for random variable objects so that visualizing outcomes and their probabilities is as simple as calling \code{plot(X)}. Figure \ref{fig:plot1} shows a visual representation of the probability mass function (pmf) of a fair die. The x axis includes all outcomes, and the y axis includes the probabilities of each particular outcome. Figure \ref{fig:plot2} shows the pmf of the sum of two independent rolls of a fair die. The pmf of a sum of 20 independent rolls of a die is given in Figure \ref{fig:plot20}.
 
 <<plot1, echo=FALSE, fig.cap='Plot method called on a fair die random variable.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 plot(X)
@@ -231,7 +242,7 @@ X20 <- SofIID(X, n = 20, progress = FALSE)
 plot(X20)
 @
 
-In addition to a plotting method, there is also a method for \code{qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}.
+In addition to a plotting method, there is also a method for \code{qqnorm} to allow assessment of normality for random variable objects, as displayed in Figure \ref{fig:qqplot}. While very close to a normal, the sum of 20 independent rolls of a fair die still shows a slight S curve in the Q-Q plot.
 
 <<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 qqnorm(X20)
