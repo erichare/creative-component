@@ -290,9 +290,9 @@ Prop(X.sim > 3)
 @
 
 \section{Extended Example: Playing Craps}
-Craps is a common card game played in casinos. The game begins with what is called the ``Come Out" roll, in which two fair dice are rolled. If a sum of seven or eleven is obtained, the player wins. If a sum of two, three, or twelve is obtained, the player loses. In all other cases, the roll obtained is declared the ``Point" and the player rolls again in an attempt to obtain this same point value. If the player rolls the Point, they win, but if they roll a seven, they lose. Rolls continue until one of these two outcomes is achieved.
+Craps is a common dice game played in casinos. The game begins with what is called the ``Come Out" roll, in which two fair dice are rolled. If a sum of seven or eleven is obtained, the player wins. If a sum of two, three, or twelve is obtained, the player loses. In all other cases, the roll obtained is declared the ``Point" and the player rolls again in an attempt to obtain this same point value. If the player rolls the Point, they win, but if they roll a seven, they lose. Rolls continue until one of these two outcomes is achieved.
 
-\pkg{discreteRV} allows for a seamless analysis and simulation of the probabilities associated with different events in Craps. Let us begin by asking ``What is the probability that the game ends after the first roll?" Let us construct random variables to answer this question. We construct a random variable \code{X} representing the single roll of a fair die, and then we use the \code{SofIID} function to sum over two rolls.
+\pkg{discreteRV} allows for a seamless analysis and simulation of the probabilities associated with different events in Craps. Let us begin by asking ``What is the probability that the game ends after the first roll?" To answer this question we construct two random variables. Random variable \code{X} represents the single roll of a fair die, and then we use the \code{SofIID} function to sum over two rolls for the random variable \code{roll}.
 
 <<craps1>>=
 X <- make.RV(outcomes = 1:6, probs = 1/6)
@@ -318,7 +318,7 @@ P(roll %in% win_rolls | roll %in% end_rolls)
 P(roll %in% loss_rolls | roll %in% end_rolls)
 @
 
-Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{multN} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have possible outcomes ($11^2$), and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls, which is approximately 30\%.
+Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{multN} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have $11^2$ possible outcomes, and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls, which is approximately 30\%.
 
 <<craps4>>=
 two_rolls <- multN(roll, 2)
@@ -331,7 +331,7 @@ winning_outcomes
 P(two_rolls %in% winning_outcomes)
 @
 
-Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine in order to test this. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable representing the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times. The results indicate that the player wins a game of craps approximately 49\% of the time.
+Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine  to simulate playing Craps. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable \code{roll}, which represents the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times. The results indicate that the player wins a game of craps approximately 49\% of the time.
 
 <<craps5>>=
 craps_game <- function(RV) {    
@@ -355,7 +355,7 @@ sim.results <- replicate(1000, sum(replicate(100, craps_game(roll))))
 @
 
 \section{Conclusion}
-The power of \pkg{discreteRV} is truly in its simplicity. Because it uses familiar introductory probability syntax, it can allow students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, \pkg{discreteRV} also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
+The power of \pkg{discreteRV} is truly in its simplicity. Because it uses familiar introductory probability syntax, it  allows students who may not be experienced or comfortable with programming to ease into computer-based computations. Nonetheless, \pkg{discreteRV} also includes several powerful functions for analyzing, summing, and combining discrete random variables which can be of use to the experienced programmer.
 
 \nocite{*}
 \bibliography{references}
