@@ -20,7 +20,7 @@
 \begin{article}
 
 \title{Analyzing Peptide Libraries with peptider}
-\author{by Eric Riemer Hare, Heike Hofmann, and Timo Sieber}
+\author{by Eric Hare, Heike Hofmann, and Timo Sieber}
 
 \maketitle
 
@@ -129,7 +129,7 @@ coverage(6, "NNK", N = 10^8)
 
 It may be of interest to compare the expected coverage across the different encoding schemes available in \pkg{peptider}. We can plot the expected coverage as a function of the library size for all four built-in encoding schemes as follows:
 
-<<coverage_calc, cache=TRUE>>=
+<<coverage_calc>>=
 library(plyr)
 library(ggplot2)
 
@@ -204,14 +204,6 @@ unique(unlist(getNeighbors(getNeighbors("HENNING"))))
 
 \section{Further Work}
 Although these functions are suitable for working with peptides up to about length ten, they become slower and more problematic for larger peptides. Work has progressed on a new suite of functions which simplify the encoding of peptides. By recognizing the assumption of independence of each amino acid, we can store counts of each peptide class in order to avoid storing all possible permutations of peptide classes. This greatly simplifies the computation time and allows for peptides of length 20 and beyond to be analyzed in the context of peptide libraries.
-
-Replacement functions for most of the previously described functionality using this new encoding scheme is available unexported in \pkg{peptider}. For instance, to compute the coverage of a size $10^{25}$ NNK library with peptides of length 18, one can call:
-
-<<makowski_new>>=
-peptider:::coverage_new(18, "NNK", N = 10^25)
-@
-
-Functions for coverage, efficiency, diversity, and inclusion probabilities have all been written and have the ``new" suffix.
 
 \section{Conclusion}
 \pkg{peptider} aims to provide a seamless way to assess the quality of different peptide libraries. By providing functions to calculate both the diversity of the peptide library itself, as well as inclusion probabilities of particular peptides of interest, it can help researchers in other fields to make a more informed decision regarding which libraries to invest in.

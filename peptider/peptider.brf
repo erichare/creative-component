@@ -1,3 +1,7 @@
+\backcite {m4}{{1}{2}{chapter.2}}
 \backcite {r:1999}{{1}{2.1}{section.2.1}}
 \backcite {i:2001}{{1}{2.1}{section.2.1}}
+\backcite {m2}{{1}{2.1}{section.2.1}}
+\backcite {ggplot2}{{1}{2.1}{section.2.1}}
 \backcite {m4}{{1}{2.1}{section.2.1}}
+\backcite {m5}{{1}{2.1.1}{subsection.2.1.1}}
