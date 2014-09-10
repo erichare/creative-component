@@ -1,22 +1,45 @@
-\documentclass{article}
-\usepackage{graphicx, hyperref}
-\usepackage[margin=1.25in]{geometry}
-\usepackage[backend=bibtex, natbib=true]{biblatex}
-\usepackage{float}    % for fig.pos='H'
-\addbibresource{references.bib}
+\documentclass{NAR}
 
-\title{A Web Application for Efficient Analysis of Peptide Libraries}
-\author{Eric Riemer Hare}
+% Enter dates of publication
+\copyrightyear{2015}
+\pubdate{XX January 2015}
+\pubyear{2015}
+\jvolume{XX}
+\jissue{XX}
+
+\usepackage{url}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{appendix}
+\usepackage{color}
+\usepackage[dvipsnames,svgnames]{xcolor}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 
 \begin{document}
+\firstpage{1}
+
+\title{A Web Application for Efficient Analysis of Peptide Libraries}
+
+\author{
+Eric Hare\,$^{1,*}$
+\footnote{To whom correspondence should be addressed.
+Tel: , Fax: , Email: erichare@iastate.edu}}
+
+\address{$^{1}$Department of Statistics, Iowa State University, Ames IA 50011-1210, United States.}
+
+\history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
+
+\editor{Associate Editor: XXXXXXX}
 
 \maketitle
 
-\abstract{
-Peptide libraries have important theoretical and practical applications in the fields of biology and medicine. Despite their importance, little analysis has been done to assess the statistical properties of different libraries. This paper introduces a web application called PeLiCa, or Peptide Library Calculator, built upon the Shiny web-application framework. PeLiCa provides an easy-to-use and powerful front-end to the R package peptider, allowing users to conduct a statistical analysis of a set of pre-defined peptide library schemes, or a custom-defined scheme of their own choosing. Results are instantly displayed, to help the user make a more informed decision regarding what specific peptide library will be most useful for their particular application or research.
-}
+\begin{abstract}
 
-\clearpage
+Peptide libraries have important theoretical and practical applications in the fields of biology and medicine. Despite their importance, little analysis has been done to assess the statistical properties of different libraries. This paper introduces a web application called PeLiCa, or Peptide Library Calculator, built upon the Shiny web-application framework. PeLiCa provides an easy-to-use and powerful front-end to the R package peptider, allowing users to conduct a statistical analysis of a set of pre-defined peptide library schemes, or a custom-defined scheme of their own choosing. Results are instantly displayed, to help the user make a more informed decision regarding what specific peptide library will be most useful for their particular application or research.
+
+\end{abstract}
 
 <<libraries, echo=FALSE, cache=FALSE, message=FALSE>>=
     library(peptider)
@@ -32,9 +55,11 @@ PeLiCa is a Shiny application. Shiny is a framework for writing web-applications
 \section{User Interface}
 Similar to other Shiny applications, PeLiCa consists of three primary UI components, the Configuration Panel, the Tab Panel, and the Results Panel, each illustrated in Figure \ref{fig:ui-components}. The Configuration Panel is located along the left-hand column. This panel allows for various parameters of peptide libraries to be adjusted, and some configuration options relating to PeLiCa to be changed depending on user preference. The top panel is the Tab Panel, which contains various tabs corresponding to different properties of peptide libraries that can be investigated. The bottom panel is the Results panel, which will contain the results of the analysis depending on the tab and configuration options selected.
 
+\enlargethispage{-65.1pt}
+
 \begin{figure}[H]
   \centering
-    \includegraphics[width=\textwidth]{figure/pelica-ui.png}
+    \includegraphics[width=\linewidth]{figure/pelica-ui.png}
   \caption{Screenshot of PeLiCa indicating the three primary UI components. (1) The Configuration Panel (2) The Tab Panel (3) The Results Panel.}
   \label{fig:ui-components}
 \end{figure}
@@ -48,7 +73,7 @@ The first set of features available in PeLiCa involve the specification of prope
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.5\textwidth]{figure/library-properties.png}
+    \includegraphics[width=\linewidth]{figure/library-properties.png}
   \caption{The Library Properties section of the Configuration Panel.}
   \label{fig:library-properties}
 \end{figure}
@@ -61,14 +86,14 @@ Users can then specify a peptide of interest, as shown in Figure \ref{fig:peptid
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.5\textwidth]{figure/peptide-of-interest.png}
+    \includegraphics[width=\linewidth]{figure/peptide-of-interest.png}
   \caption{The Peptide of Interest section of the Configuration Panel.}
   \label{fig:peptide-of-interest}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=0.5\textwidth]{figure/configuration.png}
+    \includegraphics[width=\linewidth]{figure/configuration.png}
   \caption{The Configuration section of the Configuration Panel.}
   \label{fig:configuration}
 \end{figure}
@@ -87,7 +112,7 @@ The peptide tab includes information allowing investigation of the peptide selec
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=\textwidth]{figure/peptide-tab.png}
+    \includegraphics[width=\linewidth]{figure/peptide-tab.png}
   \caption{Boxplots displayed in PeLiCa representing the inclusion probabilities for an NNN library with peptide length seven and a library size of $1 \times 10^8$. The inclusion probability of HENNING is displayed in the plot as a circle.}
   \label{fig:peptide-tab}
 \end{figure}
@@ -100,7 +125,7 @@ The Expected Coverage tab displays a numerical value for the expected coverage o
 
 \begin{figure}[H]
   \centering
-    \includegraphics[width=\textwidth]{figure/coverage-tab.png}
+    \includegraphics[width=\linewidth]{figure/coverage-tab.png}
   \caption{Plots of expected coverage for an NNN library with peptide length seven and a library size of $1 \times 10^8$}
   \label{fig:coverage-tab}
 \end{figure}
@@ -117,7 +142,18 @@ A new version of PeLiCa is in currently in progress. The new version supports lo
 \section{Conclusion}
 By utilizing the R package {\it peptider} and the web application framework Shiny, PeLiCa allows for a powerful statistical analysis of peptide libraries. It is flexible enough to allow investigation of a wide variety of different library schemes, peptide lengths, and library sizes. Still, the application is web-based and easy to use, making the barrier of entry for those outside the field of statistics very low.
 
-\nocite{*}
-\printbibliography
+\section{Funding}
+This work was not funded by a specific source.
+
+% references section
+\bibliographystyle{nar}
+% argument is your BibTeX string definitions and bibliography database(s)
+\bibliography{references}
+%
+
+\listoffigures
+
+\newpage\vfill\newpage
+\section*{Supplementary Material}
 
 \end{document}
