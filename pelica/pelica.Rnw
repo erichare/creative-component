@@ -13,6 +13,7 @@
 \usepackage{appendix}
 \usepackage{color}
 \usepackage[dvipsnames,svgnames]{xcolor}
+\newcommand{\hh}[1]{{\color{orange} #1}}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
@@ -24,10 +25,13 @@
 
 \author{
 Eric Hare\,$^{1,*}$
+Timo Sieber\,$^2$
+Heike Hofmann\,$^{1}$
 \footnote{To whom correspondence should be addressed.
 Tel: , Fax: , Email: erichare@iastate.edu}}
 
-\address{$^{1}$Department of Statistics, Iowa State University, Ames IA 50011-1210, United States.}
+\address{$^{1}$Department of Statistics, Iowa State University, Ames IA 50011-1210, United States.\\
+$^{2}$New affiliation.\\}
 
 \history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
 
@@ -45,15 +49,19 @@ Peptide libraries have important theoretical and practical applications in the f
     library(peptider)
     library(shiny)
 @
-
+\tableofcontents
 \section{Introduction}
-With the introduction of the R package {\it peptider}, analysis of the statistical properties of various peptide libraries is now possible. However, use of this package still requires familiarity with the R language, and more general programming concepts. In this paper, I introduce a new web interface called {\it PeLiCa} (or Peptide Library Calculator) which provides a useable and flexible front-end to peptider. PeLiCa is designed for biologists and others working with peptide libraries, and does not require programming knowledge to conduct an analysis. PeLiCa can be accessed from the url \url{http://www.pelica.org}.
+With the introduction of the R package {\it peptider} \cite{R, peptider}, analysis of the statistical properties of various peptide libraries is now possible. However, use of this package still requires familiarity with the R language, and more general programming concepts. In this paper, I introduce a new web interface called {\it PeLiCa} (or Peptide Library Calculator) which provides a useable and flexible front-end to peptider. PeLiCa is designed for biologists and others working with peptide libraries, and does not require programming knowledge to conduct an analysis. PeLiCa can be accessed from the url \url{http://www.pelica.org}.
+\hh{This intro needs besides the technological intro an intro from the biological side - maybe in the form of a set of functions that can be answered throughout the paper}
 
 \section{Structure}
-PeLiCa is a Shiny application. Shiny is a framework for writing web-applications in the R language, requiring little-to-no javascript programming knowledge. PeLiCa uses this framework to provide interactivity. For instance, when the user of PeLiCa changes a property of the peptide library, such as the encoding scheme, the results, tables, and plots will instantly update to reflect the new library. PeLiCa is currently hosted on the Glimmer server provided by the RStudio team.
+\hh{It might be easier to read/write the 'what can this do' first before the 'how is it implemented', or did the webapplication/server issue actually give out sections to fill in?}
+
+PeLiCa is a Shiny application \cite{shiny}. Shiny is a framework for writing web-applications in the R language, requiring little-to-no javascript programming knowledge. \hh{for the biologists R is just as bad as javascript - I don't think we can really score with that} PeLiCa uses this framework to provide interactivity. For instance, when the user of PeLiCa changes a property of the peptide library, such as the encoding scheme, the results, tables, and plots will instantly update to reflect the new library. PeLiCa is currently hosted on the Glimmer server provided by the RStudio team.
 
 \section{User Interface}
-Similar to other Shiny applications, PeLiCa consists of three primary UI components, the Configuration Panel, the Tab Panel, and the Results Panel, each illustrated in Figure \ref{fig:ui-components}. The Configuration Panel is located along the left-hand column. This panel allows for various parameters of peptide libraries to be adjusted, and some configuration options relating to PeLiCa to be changed depending on user preference. The top panel is the Tab Panel, which contains various tabs corresponding to different properties of peptide libraries that can be investigated. The bottom panel is the Results panel, which will contain the results of the analysis depending on the tab and configuration options selected.
+%Similar to other Shiny applications, 
+PeLiCa consists of three primary UI components, the Configuration Panel, the Tab Panel, and the Results Panel, each illustrated in Figure \ref{fig:ui-components}. The Configuration Panel is located along the left-hand column. This panel allows for various parameters of peptide libraries to be adjusted, and some configuration options relating to PeLiCa to be changed depending on user preference. The top panel is the Tab Panel, which contains various tabs corresponding to different properties of peptide libraries that can be investigated. The bottom panel is the Results panel, which will contain the results of the analysis depending on the tab and configuration options selected. 
 
 \enlargethispage{-65.1pt}
 
@@ -64,11 +72,11 @@ Similar to other Shiny applications, PeLiCa consists of three primary UI compone
   \label{fig:ui-components}
 \end{figure}
 
-Another important component of the user interface are the help tooltips. Throughout the application, blue question marks will be available. When the user moves their mouse cursor over these icons, helpful tooltips will appear to instruct the user on how to proceed, or provide more information about the library property being investigated.
+Another important component of the user interface are the help tooltips. Throughout the application, blue question marks will be available. When the user moves their mouse cursor over these icons, tooltips will appear to instruct the user on how to proceed, or provide more information about the library property being investigated.
 
 \section{Features}
 
-\subsection{Configuration Panel}
+\subsection{Configuration Panel}\label{configuration}
 The first set of features available in PeLiCa involve the specification of properties of the library of interest. These features are displayed in Figure \ref{fig:library-properties}. Users can first select a library scheme. PeLiCa provides several built-in library schemes, the first of which is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be three bases. The third is NNK/S, which covers both NNK and NNS schemes, with the third position restricted to two bases. Both NNK and NNS have identical statistical properties in the analysis available in PeLiCa[REF]. Finally, there are trimer-based libraries in which the codons are pre-defined. PeLiCa also includes variations of these four library types in which Cysteine is treated as a non-viable amino acid.
 
 \begin{figure}[H]
