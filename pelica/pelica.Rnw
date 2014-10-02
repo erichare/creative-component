@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{appendix}
 \usepackage{color}
+\usepackage{graphicx}
 \usepackage[dvipsnames,svgnames]{xcolor}
 \newcommand{\hh}[1]{{\color{orange} #1}}
 
@@ -54,23 +55,17 @@ Peptide libraries have important theoretical and practical applications in the f
 With the introduction of the R package {\it peptider} \cite{R, peptider}, analysis of the statistical properties of various peptide libraries is now possible. However, use of this package still requires familiarity with the R language, and more general programming concepts. In this paper, I introduce a new web interface called {\it PeLiCa} (or Peptide Library Calculator) which provides a useable and flexible front-end to peptider. PeLiCa is designed for biologists and others working with peptide libraries, and does not require programming knowledge to conduct an analysis. PeLiCa can be accessed from the url \url{http://www.pelica.org}.
 \hh{This intro needs besides the technological intro an intro from the biological side - maybe in the form of a set of functions that can be answered throughout the paper}
 
-\section{Structure}
-\hh{It might be easier to read/write the 'what can this do' first before the 'how is it implemented', or did the webapplication/server issue actually give out sections to fill in?}
-
-PeLiCa is a Shiny application \cite{shiny}. Shiny is a framework for writing web-applications in the R language, requiring little-to-no javascript programming knowledge. \hh{for the biologists R is just as bad as javascript - I don't think we can really score with that} PeLiCa uses this framework to provide interactivity. For instance, when the user of PeLiCa changes a property of the peptide library, such as the encoding scheme, the results, tables, and plots will instantly update to reflect the new library. PeLiCa is currently hosted on the Glimmer server provided by the RStudio team.
-
 \section{User Interface}
-%Similar to other Shiny applications, 
 PeLiCa consists of three primary UI components, the Configuration Panel, the Tab Panel, and the Results Panel, each illustrated in Figure \ref{fig:ui-components}. The Configuration Panel is located along the left-hand column. This panel allows for various parameters of peptide libraries to be adjusted, and some configuration options relating to PeLiCa to be changed depending on user preference. The top panel is the Tab Panel, which contains various tabs corresponding to different properties of peptide libraries that can be investigated. The bottom panel is the Results panel, which will contain the results of the analysis depending on the tab and configuration options selected. 
 
 \enlargethispage{-65.1pt}
 
-\begin{figure}[H]
+\begin{figure*}
   \centering
-    \includegraphics[width=\linewidth]{figure/pelica-ui.png}
+    \includegraphics[width=\textwidth]{figure/pelica-ui.png}
   \caption{Screenshot of PeLiCa indicating the three primary UI components. (1) The Configuration Panel (2) The Tab Panel (3) The Results Panel.}
   \label{fig:ui-components}
-\end{figure}
+\end{figure*}
 
 Another important component of the user interface are the help tooltips. Throughout the application, blue question marks will be available. When the user moves their mouse cursor over these icons, tooltips will appear to instruct the user on how to proceed, or provide more information about the library property being investigated.
 
@@ -143,6 +138,9 @@ Similar the the Expected Coverage tab, the Relative Efficiency tab provides a nu
 
 \subsubsection{Functional Diversity}
 The final tab in PeLiCa is the Functional Diversity tab, which displays both the functional diversity of your library, and a table of the functional diversity for other schemes and peptide lengths (Note that the functional diversity does not depend on the size of the library).
+
+\section{Technology}
+PeLiCa is a Shiny application \cite{shiny}. Shiny is a framework for writing web-applications in the R language, requiring little-to-no javascript programming knowledge. PeLiCa uses this framework to provide interactivity. For instance, when the user of PeLiCa changes a property of the peptide library, such as the encoding scheme, the results, tables, and plots will instantly update to reflect the new library. In this way, the comuptation of peptide library properties can be done on the fly, with a simple point-and-click interface and without any use of programming.
 
 \section{Further Work}
 A new version of PeLiCa is in currently in progress. The new version supports lower resolution monitors, includes a new framework for tooltips, and supports a wider range of peptide lengths and library sizes. This new version is currently deployed on ShinyApps at \url{http://erichare.shinyapps.io/pelica}.
