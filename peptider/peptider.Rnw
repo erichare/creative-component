@@ -41,12 +41,12 @@ Peptide libraries have important theoretical and practical applications in the f
 \section{Introduction}
 Libraries of peptides, or amino acid sequences, have a number of applications in the Biological sciences, from studying protein interactions, to vaccine research \citep{r:1999, i:2001}. Despite their importance, little analysis has been done to assess the statistical properties of different peptide libraries.
 
-\pkg{peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and trimer schemes. It also allows for easy analysis of user-created custom library schemes. \pkg{peptider} makes use of the R package \pkg{discreteRV} \citep{m2}, which allows for manipulation and analysis of discrete random variables; all of the graphical output is presented within the \pkg{ggplot2} framework \citep{ggplot2}. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated. The corresponding definitions for the statistical functions in \pkg{peptider} are taken from \cite{m4}.
+\pkg{peptider} is a newly-released R package which helps to evaluate many important statistical properties of these libraries. It supports a number of built-in library schemes, including NNN, NNB, NNK, NNS, and 20/20 schemes. It also allows for easy analysis of user-created custom library schemes. \pkg{peptider} makes use of the R package \pkg{discreteRV} \citep{m2}, which allows for manipulation and analysis of discrete random variables; all of the graphical output is presented within the \pkg{ggplot2} framework \citep{ggplot2}. By treating each amino acid in a peptide as a realization of an independent draw from the pool of all possible amino acids, probabilities for the occurrence of peptides can easily be formulated. The corresponding definitions for the statistical functions in \pkg{peptider} are taken from \cite{m4}.
 
 This paper will focus on two distinct functional areas of \pkg{peptider}. The first is Library Diversity, or statistical measures of the quality of the library itself. The second is Peptide Coverage, or how likely the library is to include particularly desired peptides, or peptides that are most similar to desired peptides. Before proceeding to discuss these measures, we will first discuss the built-in library schemes, and how to define custom schemes.
 
 \subsection{Library Schemes}
-\pkg{peptider} has several built-in library schemes. The first is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon, and hence there are $4^3 = 64$ possible nucleotides. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be one of the three bases C, G, or T, yielding 48 nucleotides. Both NNK and NNS have identical statistical properties in this analysis, with the third position restricted to two bases (G or T for NNK, and G or C for NNS, respectively) for a total of 32 nucleotides.  Finally, there are trimer-based libraries in which the codons are pre-defined. Figure \ref{fig:aa} illstruates a codon wheel by which the three bases lead to specific codon representations for amino acids \citep{m5}. During peptide library construction, these codons are built from the bases, and restrictions may be imposed in order to reduce the number of codon representations of particular amino acids.
+\pkg{peptider} has several built-in library schemes. The first is the NNN scheme, in which all four bases (Adenine, Guanine, Cytosine, and Thymine) can occur at all three positions in a particular codon, and hence there are $4^3 = 64$ possible nucleotides. The second is the NNB scheme, where the first two positions are unrestricted, but the third position can only be one of the three bases C, G, or T, yielding 48 nucleotides. Both NNK and NNS have identical statistical properties in this analysis, with the third position restricted to two bases (G or T for NNK, and G or C for NNS, respectively) for a total of 32 nucleotides.  Finally, there are trimer-based libraries in which the codons are pre-defined, as in the 20/20 scheme included in \pkg{peptider}. Figure \ref{fig:aa} illstruates a codon wheel by which the three bases lead to specific codon representations for amino acids \citep{m5}. During peptide library construction, these codons are built from the bases, and restrictions may be imposed in order to reduce the number of codon representations of particular amino acids.
 
 \begin{figure}[H]
   \centering
@@ -72,7 +72,9 @@ nnk6 <- libscheme("NNK", k = 6)
 We also provide the possibility to define a custom library scheme. To do so, a data frame containing three columns ``class", ``aacid", and ``c" must be created. Here is an example of a data frame describing an NNK scheme in which Cysteine is regarded as inviable, and hence ignored.
 
 <<custom>>=
-custom_nnk <- data.frame(class = c("A", "B", "C", "Z"), aacids = c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"), c = c(3, 2, 1, 1))
+custom_nnk <- data.frame(class = c("A", "B", "C", "Z"), 
+                         aacids = c("SLR", "AGPTV", "DEFHIKMNQWY", "C*"), 
+                         c = c(3, 2, 1, 1))
 custom_nnk
 @
 
@@ -133,7 +135,7 @@ It may be of interest to compare the expected coverage across the different enco
 library(plyr)
 library(ggplot2)
 
-dframe <- expand.grid(Scheme = c("NNN", "NNB", "NNK", "trimer"), Size = 10^seq(6,10, by=0.2))
+dframe <- expand.grid(Scheme = c("NNN", "NNB", "NNK", "2020"), Size = 10^seq(6,10, by=0.2))
 results.dframe <- ddply(dframe, .(Scheme, Size), function(row){
     coverage(6, as.character(row$Scheme), row$Size)
 })
