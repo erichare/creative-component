@@ -15,8 +15,8 @@
 \sectionhead{Contributed research article}
 \volume{XX}
 \volnumber{YY}
-\year{2014}
-\month{September}
+\year{2015}
+\month{February}
 
 %% replace RJtemplate with your article
 \begin{article}
@@ -27,7 +27,7 @@
 \maketitle
 
 \abstract{
-A prominent issue in statistics education is the sometimes large disparity between the theoretical and the computational coursework. \pkg{discreteRV} is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to the mathematical notation in introductory probability courses. The package uses function that are simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, we introduce and motivate \pkg{discreteRV}, describe its functionality, and provide reproducible examples illustrating its use.
+A prominent issue in statistics education is the sometimes large disparity between the theoretical and the computational coursework. \CRANpkg{discreteRV} is an R package for manipulation of discrete random variables which uses clean and familiar syntax similar to the mathematical notation in introductory probability courses. The package uses function that are simple enough for those less experienced with statistical programming, but has more advanced features which are suitable for a large number of more complex applications. In this paper, we introduce and motivate \pkg{discreteRV}, describe its functionality, and provide reproducible examples illustrating its use.
 }
 
 <<concordance, echo=FALSE>>=
@@ -142,7 +142,7 @@ X.loaded <- make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1))
 X.loaded
 @
 
-\subsection{Structure of an RV Object}
+\subsection{Structure of an RV object}
 
 The syntactic structure of the included functions lends itself both to a natural presentation of elementary probabilities and properties of probability mass functions in an introductory probability course, as well as more advanced modeling of discrete random variables. In Table \ref{tbl:discreteRV-connect}, we provide an overview of the notational similarities between \pkg{discreteRV} and the commonly used probability textbook by \cite{cb:2001}
 
@@ -171,7 +171,7 @@ A random variable object is constructed by defining a standard R vector to be th
 probs(X)
 @
 
-\subsection{Probability-based Calculations}
+\subsection{Probability-based calculations}
 
 By storing the outcomes as the principle component of the object X, we can  make a number of probability statements in R. For instance, we can calculate  the probability of obtaining a roll greater than 1 by using the code $P(X > 1)$. R will check which of the values in the vector X are greater than 1. In this case, these are the outcomes 2, 3, 4, 5, and 6. Hence, R will return TRUE for these elements of X, and we compute the probability of this occurrence in the function P by simply summing over the probability values stored in the names of these particular outcomes. Likewise, we can make slightly more complicated probability statements such as $P(X > 5 \cup X = 1)$, using the \code{\%OR\%} and \code{\%AND\%} operators. Consider our Poisson random variable $Y$, and suppose we want to obtain the probability that $Y$ is within a distance $\delta$ of its mean parameter $\lambda = 2$:
 
@@ -198,7 +198,7 @@ V(X)
 E( (X-E(X))^2 )
 @
 
-\subsection{Joint Distributions}
+\subsection{Joint distributions}
 
 Aside from moments and probability statements, \pkg{discreteRV} includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes of the joint distribution are encoded by the outcomes on each trial separated by a comma.
 
@@ -286,7 +286,7 @@ Prop(X.sim == 3)
 Prop(X.sim > 3)
 @
 
-\section{Extended Example: Playing Craps}
+\section{Extended example: playing craps}
 Craps is a common dice game played in casinos. The game begins with what is called the ``Come Out" roll, in which two fair dice are rolled. If a sum of seven or eleven is obtained, the player wins. If a sum of two, three, or twelve is obtained, the player loses. In all other cases, the roll obtained is declared the ``Point" and the player rolls again in an attempt to obtain this same point value. If the player rolls the Point, they win, but if they roll a seven, they lose. Rolls continue until one of these two outcomes is achieved.
 
 \pkg{discreteRV} allows for a seamless analysis and simulation of the probabilities associated with different events in Craps. Let us begin by asking ``What is the probability that the game ends after the first roll?" To answer this question we construct two random variables. Random variable \code{X} represents the single roll of a fair die, and then we use the \code{SofIID} function to sum over two rolls for the random variable \code{roll}.
