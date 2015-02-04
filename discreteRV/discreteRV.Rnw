@@ -357,6 +357,27 @@ The power of \pkg{discreteRV} is truly in its simplicity. Because it uses famili
 \nocite{*}
 \bibliography{references}
 
+\address{Eric Hare\\
+  Department of Statistics\\
+  Iowa State University\\
+  1121 Snedecor Hall, Ames, IA\\
+  USA}
+\email{erichare@iastate.edu}
+
+\address{Andreas Buja\\
+  Department of Statistics\\
+  University of Pennsylvania\\
+  400 Jon M. Huntsman Hall, Philadelphia, PA\\
+  USA}
+\email{buja.at.wharton@gmail.com}
+
+\address{Heike Hofmann\\
+  Department of Statistics\\
+  Iowa State University\\
+  1121 Snedecor Hall, Ames, IA\\
+  USA}
+\email{hofmann@iastate.edu}
+
 \end{article}
 
 \end{document}
