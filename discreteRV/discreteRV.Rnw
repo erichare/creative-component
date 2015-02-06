@@ -135,7 +135,7 @@ Y <- make.RV(outcomes = c(0, Inf), probs = pois.func, lambda = 2)
 Y
 @
 
-The make.RV function also allows the definition of a random variable in terms of odds. One can construct a loaded die in which a roll of one is four times as likely as any other roll as:
+The \code{make.RV} function also allows the definition of a random variable in terms of odds. We construct a loaded die in which a roll of one is four times as likely as any other roll as:
 
 <<makeRVodds>>=
 X.loaded <- make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1))
@@ -243,6 +243,7 @@ In addition to a plotting method, there is also a method for \code{qqnorm} to al
 
 <<qqplot, echo=FALSE, fig.cap='qqnorm method called on a sum of 20 fair die random variables.', fig.align='center', fig.pos='H', out.width='0.5\\textwidth'>>=
 qqnorm(X20)
+abline()
 @
 
 \section{Simulation}
@@ -254,11 +255,11 @@ qqnorm(X20)
 \begin{tabular}{ll}\hline
 Name & Description \\
 \hline
-plot.RVsim & Plot a simulated random vector \\
-Prop & Proportion of an event observed in a vector of simulated trials \\
-props & Proportions of observed outcomes in one or more vectors of simulated trials \\
-rsim & Simulate n independent trials from a random variable X \\
-skewSim & Skew of the empirical distribution of simulated data \\
+\code{plot.RVsim} & Plot a simulated random vector \\
+\code{Prop} & Proportion of an event observed in a vector of simulated trials \\
+\code{props} & Proportions of observed outcomes in one or more vectors of simulated trials \\
+\code{rsim} & Simulate n independent trials from a random variable X \\
+\code{skewSim} & Skew of the empirical distribution of simulated data \\
 \hline
 \end{tabular}}
 \caption{\label{tbl:discreteRV-sim} List of the simulation functions contained in \pkg{discreteRV}. }
@@ -374,7 +375,7 @@ The power of \pkg{discreteRV} is truly in its simplicity. Because it uses famili
 \address{Heike Hofmann\\
   Department of Statistics\\
   Iowa State University\\
-  1121 Snedecor Hall, Ames, IA\\
+  2413 Snedecor Hall, Ames, IA\\
   USA}
 \email{hofmann@iastate.edu}
 
