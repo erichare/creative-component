@@ -122,8 +122,7 @@ Let $Y$ be a random variable distributed according to a Poisson distribution wit
 In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of outcomes, a vector of probabilities, and returns an \code{RV} object. The code to create X, a random variable representing the roll of a fair die, is as follows:
 
 <<makeRV>>=
-X <- make.RV(outcomes = 1:6, probs = 1/6)
-X
+(X <- make.RV(outcomes = 1:6, probs = 1/6))
 @
 
 Outcomes can be specified as a range of values, which is useful for distributions in which the outcomes that can occur with non-zero probability are unbounded. This can be indicated with the \code{range} parameter, which defaults to TRUE in the event that the range of values includes positive or negative infinity. To define our poisson random variable Y, we specify the outcomes as a range and the probabilities as a function:
@@ -131,15 +130,13 @@ Outcomes can be specified as a range of values, which is useful for distribution
 <<makeRVpois>>=
 pois.func <- function(y, lambda) { return(lambda^y * exp(-lambda) / factorial(y)) }
 
-Y <- make.RV(outcomes = c(0, Inf), probs = pois.func, lambda = 2)
-Y
+(Y <- make.RV(outcomes = c(0, Inf), probs = pois.func, lambda = 2))
 @
 
 The \code{make.RV} function also allows the definition of a random variable in terms of odds. We construct a loaded die in which a roll of one is four times as likely as any other roll as:
 
 <<makeRVodds>>=
-X.loaded <- make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1))
-X.loaded
+X.loaded <- (make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1)))
 @
 
 \subsection{Structure of an RV object}
@@ -269,8 +266,7 @@ Name & Description \\
 Creating a simulated random vector is done by using the \code{rsim} function. \code{rsim} accepts a parameter n representing the number of independent trials to simulate, and a parameter X representing the random variable with which to simulate from. For example, suppose we'd like to simulate ten trials from a fair die. We have already created a random variable object X, so we simply call rsim as follows:
 
 <<rsim>>=
-X.sim <- rsim(10, X)
-X.sim
+(X.sim <- rsim(10, X))
 @
 
 The object returned is a vector of simulated values, with a class attribute to contain the random variable that was used for the simulation. If we would like to retrieve only the simulated values and exclude the attached probabilities, we can coerce the object into a vector using R's built-in \code{as.vector} function.
@@ -294,8 +290,7 @@ Craps is a common dice game played in casinos. The game begins with what is call
 
 <<craps1>>=
 X <- make.RV(outcomes = 1:6, probs = 1/6)
-roll <- SofIID(X, n = 2)
-roll
+(roll <- SofIID(X, n = 2))
 @
 
 Recall that the game ends after the first roll if and only if a seven or eleven is obtained (resulting in a win), or a two, three, or twelve is obtained (resulting in a loss). Hence, we calculate the probability that the game ends after the first roll as follows:
@@ -321,10 +316,9 @@ Now, let's turn our attention to calculating the probability of winning a game i
 <<craps4>>=
 two_rolls <- multN(roll, 2)
 
-winning_outcomes <- c(paste(7, 2:12, sep = ","), # Seven on the first roll
+(winning_outcomes <- c(paste(7, 2:12, sep = ","), # Seven on the first roll
                       paste(11, 2:12, sep = ","), # Eleven on the first roll
-                      paste(4:10, 4:10, sep = ",")) # Pair between four and ten
-winning_outcomes
+                      paste(4:10, 4:10, sep = ","))) # Pair between four and ten
 
 P(two_rolls %in% winning_outcomes)
 @
