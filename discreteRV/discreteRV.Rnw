@@ -61,13 +61,13 @@ Name & Description \\
 Creation \\ 
 \hline
 \code{as.RV} & Turn a probability vector with possible outcome values in the names() attribute into a random variable \\
-\code{make.RV} & Make a random variable consisting of possible outcome values and their probabilities or odds \\
+\code{RV} & Create a random variable consisting of possible outcome values and their probabilities or odds \\
 \hline
 Manipulation \\ 
 \hline
 \code{margins} & Marginal distribution of a joint random variable \\
-\code{mult} & Joint probability mass function of random variables X and Y \\
-\code{multN} & Probability mass function of $X^n$ \\
+\code{joint} & Returns a random variable with joint probability mass function of random variables X and Y \\
+\code{iid} & Returns a random variable with joint probability mass function of random variable $X^n$ \\
 \code{SofI} & Sum of independent random variables \\
 \code{SofIID} & Sum of independent identically distributed random variables \\
 \hline
@@ -119,10 +119,10 @@ Let $Y$ be a random variable distributed according to a Poisson distribution wit
    \right.
 \end{displaymath} \\
 
-In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{make.RV} function. \code{make.RV} accepts a vector of outcomes, a vector of probabilities, and returns an \code{RV} object. The code to create X, a random variable representing the roll of a fair die, is as follows:
+In \pkg{discreteRV}, a discrete random variable is defined through the use of the \code{RV} function. \code{RV} accepts a vector of outcomes, a vector of probabilities, and returns an \code{RV} object. The code to create X, a random variable representing the roll of a fair die, is as follows:
 
 <<makeRV>>=
-(X <- make.RV(outcomes = 1:6, probs = 1/6))
+(X <- RV(outcomes = 1:6, probs = 1/6))
 @
 
 Outcomes can be specified as a range of values, which is useful for distributions in which the outcomes that can occur with non-zero probability are unbounded. This can be indicated with the \code{range} parameter, which defaults to TRUE in the event that the range of values includes positive or negative infinity. To define our poisson random variable Y, we specify the outcomes as a range and the probabilities as a function:
@@ -130,13 +130,13 @@ Outcomes can be specified as a range of values, which is useful for distribution
 <<makeRVpois>>=
 pois.func <- function(y, lambda) { return(lambda^y * exp(-lambda) / factorial(y)) }
 
-(Y <- make.RV(outcomes = c(0, Inf), probs = pois.func, lambda = 2))
+(Y <- RV(outcomes = c(0, Inf), probs = pois.func, lambda = 2))
 @
 
-The \code{make.RV} function also allows the definition of a random variable in terms of odds. We construct a loaded die in which a roll of one is four times as likely as any other roll as:
+The \code{RV} function also allows the definition of a random variable in terms of odds. We construct a loaded die in which a roll of one is four times as likely as any other roll as:
 
 <<makeRVodds>>=
-X.loaded <- (make.RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1)))
+X.loaded <- (RV(outcomes = 1:6, odds = c(4, 1, 1, 1, 1, 1)))
 @
 
 \subsection{Structure of an RV object}
@@ -162,7 +162,7 @@ discreteRV & Casella and Berger \\
 \caption{\label{tbl:discreteRV-connect} Probability functions in \pkg{discreteRV} and their corresponding syntax in introductory statistics courses.}
 \end{table}
 
-A random variable object is constructed by defining a standard R vector to be the possible outcomes that the random variable can take (the sample space $\Omega$). It is preferred, though not required, that these be encoded as integers, since this allows the computation of expected values, variances, and other distributional properties. This vector of outcomes then stores attributes which include the probability of each outcome. By default, the print method for a random variable will display the probabilities as fractions in most cases, aiding in readability. The probabilities can be retrieved as a numeric vector by using the \code{probs} function:
+A random variable object is constructed by defining a standard R vector to be the possible outcomes that the random variable can take (the sample space $\Omega$). It is preferred, though not required, that these be encoded as numeric values, since this allows the computation of expected values, variances, and other distributional properties. This vector of outcomes then stores attributes which include the probability of each outcome. By default, the print method for a random variable will display the probabilities as fractions in most cases, aiding in readability. The probabilities can be retrieved as a numeric vector by using the \code{probs} function:
 
 <<probs>>=
 probs(X)
@@ -197,20 +197,20 @@ E( (X-E(X))^2 )
 
 \subsection{Joint distributions}
 
-Aside from moments and probability statements, \pkg{discreteRV} includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{multN} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiemult} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdiemult3} gives the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes of the joint distribution are encoded by the outcomes on each trial separated by a comma.
+Aside from moments and probability statements, \pkg{discreteRV} includes a powerful set of functions used to create joint probability distributions. Once again letting X be a random variable representing a single die roll, we can use the \code{iid} function to compute the probability mass function of n trials of X. Table \ref{tbl:fairdiejoint} gives the first eight outcomes for $n = 2$, and Table \ref{tbl:fairdieiid} gives the first eight outcomes for $n = 3$. Notice again that the probabilities have been coerced into fractions for readability. Notice also that the outcomes of the joint distribution are encoded by the outcomes on each trial separated by a comma.
 
-<<fairdiemult, echo=FALSE, results='asis', message=FALSE>>=
+<<fairdiejoint, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
 
-XX <- multN(X, fractions = TRUE)
-print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(attr(XX, "probs")))))[,1:8], label = "tbl:fairdiemult", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+XX <- iid(X, fractions = TRUE)
+print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(attr(XX, "probs")))))[,1:8], label = "tbl:fairdiejoint", caption = "First eight Outcomes and their associated Probabilities for a variable representing two independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
-<<fairdiemult3, echo=FALSE, results='asis', message=FALSE>>=
+<<fairdieiid, echo=FALSE, results='asis', message=FALSE>>=
 library(xtable)
 
-XX <- multN(X, n = 3, fractions = TRUE)
-print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(attr(XX, "probs")))))[,1:8], label = "tbl:fairdiemult3", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
+XX <- iid(X, n = 3, fractions = TRUE)
+print(xtable(t(data.frame(Outcome = as.character(XX), Probability = as.character(fractions(attr(XX, "probs")))))[,1:8], label = "tbl:fairdieiid", caption = "First eight Outcomes and their associated Probabilities for a variable representing three independent rolls of a die."), table.position = 'H', include.colnames = FALSE)
 @
 
 \pkg{discreteRV} also includes functions to compute the sum of independent random variables. If the variables are identically distributed, the \code{SofIID} function can be used to compute probabilities for the sum of n independent realizations of the random variable. In our fair die example, \code{SofIID(X, 2)}  creates a random variable object for the sum of two fair dice as shown in Table \ref{tbl:fairdiesofi}
@@ -289,8 +289,8 @@ Craps is a common dice game played in casinos. The game begins with what is call
 \pkg{discreteRV} allows for a seamless analysis and simulation of the probabilities associated with different events in Craps. Let us begin by asking ``What is the probability that the game ends after the first roll?" To answer this question we construct two random variables. Random variable \code{X} represents the single roll of a fair die, and then we use the \code{SofIID} function to sum over two rolls for the random variable \code{roll}.
 
 <<craps1>>=
-X <- make.RV(outcomes = 1:6, probs = 1/6)
-(roll <- SofIID(X, n = 2))
+X <- RV(outcomes = 1:6, probs = 1/6)
+(Roll <- X + X)
 @
 
 Recall that the game ends after the first roll if and only if a seven or eleven is obtained (resulting in a win), or a two, three, or twelve is obtained (resulting in a loss). Hence, we calculate the probability that the game ends after the first roll as follows:
@@ -301,26 +301,25 @@ loss_rolls <- c(2, 3, 12)
 
 end_rolls <- c(win_rolls, loss_rolls)
 
-P(roll %in% end_rolls)
+P(Roll %in% end_rolls)
 @
 
 Now suppose we would like to condition on the game having ended after the first roll. Using the conditional probability operator in \pkg{discreteRV}, we can obtain the probabilities of winning and losing given that the game ended after the first roll:
 
 <<craps3>>=
-P(roll %in% win_rolls | roll %in% end_rolls)
-P(roll %in% loss_rolls | roll %in% end_rolls)
+P(Roll %in% win_rolls | Roll %in% end_rolls)
+P(Roll %in% loss_rolls | Roll %in% end_rolls)
 @
 
-Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{multN} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have $11^2$ possible outcomes, and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls, which is approximately 30\%.
+Now, let's turn our attention to calculating the probability of winning a game in two rolls. Recall that we can use the \code{iid} function to generate joint distributions of independent and identically distributed random variables. In this case, we would like to generate the joint distribution for two independent rolls of two dice. Now, we will have $11^2$ possible outcomes, and our job is to determine which outcomes result in a win. We know that any time the first roll is a seven or eleven, we will have won. We also know that if the roll is between four and ten inclusive, then we will get to roll again. To win within two rolls given that we've received a four through ten requires that the second roll match the first. We can enumerate the various possibilities to calculate the probability of winning in two rolls, which is approximately 30\%.
 
 <<craps4>>=
-two_rolls <- multN(roll, 2)
+TwoRolls <- Roll * Roll
 
-(winning_outcomes <- c(paste(7, 2:12, sep = ","), # Seven on the first roll
-                      paste(11, 2:12, sep = ","), # Eleven on the first roll
-                      paste(4:10, 4:10, sep = ","))) # Pair between four and ten
+First <- marginal(TwoRolls, 1)
+Second <- marginal(TwoRolls, 2)
 
-P(two_rolls %in% winning_outcomes)
+P(First %in% c(7, 11) %OR% (First %in% 4:10 %AND% (First == Second)))
 @
 
 Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine  to simulate playing Craps. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable \code{roll}, which represents the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times. The results indicate that the player wins a game of craps approximately 49\% of the time.
@@ -342,7 +341,7 @@ craps_game <- function(RV) {
     }
 }
 
-sim.results <- replicate(1000, sum(replicate(100, craps_game(roll))))
+sim.results <- replicate(1000, sum(replicate(100, craps_game(Roll))))
 (emp.prob <- mean(sim.results / 100))
 @
 

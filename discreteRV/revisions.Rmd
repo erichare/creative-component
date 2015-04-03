@@ -1,0 +1,13 @@
+---
+title: "Response to Reviewers"
+author: "Eric Hare"
+date: "04/03/2015"
+output: pdf_document
+---
+
+1. I have renamed the make.RV function to RV, and updated the paper accordingly.
+2. I have renamed the mult and multN functions to joint and iid respectively, and updated the paper accordingly. I have also clarified the descriptions of these functions in the table.
+3. The `+`, `*`, and `^` operators are now overloaded. One may call X + Y to form the sum of two independent random variables, or even pass in an arbitrary number of arguments like X + X + Y + Y to form the random variable consisting of those summed outcomes. Similar functionality now exists for joint distributions, where you may call X * Y to form the joint of X and Y, or X * X * X to form X^3. We elected not to allow X * 3 or X^3 form the same thing, because frequently we use those computations to perform moment calcuations. Right now, X * 3 will return a random variable with each outcome multiplied by 3 (and the same probabilities) while X^3 will return a random variable with each outcome cubed.
+4. All random variables used as examples in both the documentation of discreteRV and in the paper now begin with a capital letter.
+5. We did consider enforcing that random variables have numeric outcomes, as mathematically they must. But we did away with this requirement so that the use cases for discreteRV could be expanded to realms where it is easier to refer to factor outcomes. Of course, this greatly reduces the functionality of the package as pointed out. We have updated the paper to clarify that numeric values are preferred for outcomes, not strictly integers.
+6. The undesirable inherited properties of vectors pointed out have now been solved by overloaded the + and * operators as described above.
