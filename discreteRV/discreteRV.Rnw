@@ -261,6 +261,7 @@ Although the marginal distributions allow all the same computations of any univa
 <<coolstuff>>=
 P(A < B)
 P(A == 2 | B > 0)
+P(A == 2 | (B == 1) %OR% (B == 2))
 independent(A, B)
 A | (A > 1)
 A | (B == 2)
