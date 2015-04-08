@@ -16,7 +16,7 @@
 \volume{XX}
 \volnumber{YY}
 \year{2015}
-\month{February}
+\month{April}
 
 %% replace RJtemplate with your article
 \begin{article}
@@ -66,10 +66,11 @@ Creation \\
 \hline
 Manipulation \\ 
 \hline
+\code{iid} & Returns a random variable with joint probability mass function of random variable $X^n$ \\
+\code{independent} & Returns a boolean indicating whether two RVs X and Y are independent \\
+\code{joint} & Returns a random variable with joint probability mass function of random variables X and Y \\
 \code{marginal} & The specified marginal distribution of a joint random variable \\
 \code{margins} & All marginal distributions of a joint random variable \\
-\code{joint} & Returns a random variable with joint probability mass function of random variables X and Y \\
-\code{iid} & Returns a random variable with joint probability mass function of random variable $X^n$ \\
 \code{SofI} & Sum of independent random variables \\
 \code{SofIID} & Sum of independent identically distributed random variables \\
 \hline
@@ -399,8 +400,8 @@ craps_game <- function(RV) {
     }
 }
 
-sim.results <- replicate(1000, sum(replicate(100, craps_game(Roll))))
-(emp.prob <- mean(sim.results / 100))
+sim.results <- replicate(100000, craps_game(Roll))
+mean(sim.results)
 @
 
 \section{Conclusion}
