@@ -26,7 +26,7 @@ The discreteRV and peptider papers are to be submitted to the R journal, while t
   \label{layers}
 \end{figure}
 
-\includepdf[pages={-}]{discreteRV/discreteRV.pdf}
+\includepdf[pages={-}]{discreteRV/RJwrapper.pdf}
 \includepdf[pages={-}]{peptider/peptider.pdf}
 \includepdf[pages={-}]{pelica/pelica.pdf}
 \includepdf[pages={-}]{peptides/peptides.pdf}
