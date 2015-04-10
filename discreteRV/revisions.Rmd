@@ -6,7 +6,10 @@ output: pdf_document
 geometry: margin=.8in
 ---
 
-1. We have renamed the `make.RV` function to `RV`, and updated the paper accordingly.
+1. It would be best to avoid using . in the names of functions except when defining methods. In particular, make.RV() is badly named, since "RV" is the class of the main objects created in this package, so this looks like a method for a make() function. RV() would be a better name. (as.RV() is less bad since this is a common paradigm in R and it is unlikely that anyone will define a generic names as().)
+
+    *We have renamed the `make.RV` function to `RV`, and updated the paper accordingly.*
+
 2. We have renamed the `mult` and `multN` functions to `joint` and `iid` respectively, and updated the paper accordingly. We have also clarified the descriptions of these functions in the table.
 3. The `+` and `*` operators are now overloaded. One may call `X + Y` to form the sum of two independent random variables. Similar functionality now exists for joint distributions, where you may call `X * Y` to form the joint of X and Y. Note that if `X * X` is called, it will simplify return the variable obtained by squaring each outcome, and not the joint of two independent realizations of X, so that computations like `E(X^2)` still make sense.
 4. All random variables used as examples in both the documentation of discreteRV and in the paper now begin with a capital letter.

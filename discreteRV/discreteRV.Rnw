@@ -60,9 +60,9 @@ Name & Description \\
 \hline
 Creation \\ 
 \hline
+\code{RV} & Create a random variable consisting of possible outcome values and their probabilities or odds \\
 \code{as.RV} & Turn a probability vector with possible outcome values in the names() attribute into a random variable \\
 \code{jointRV} & Create a joint random variable consisting of possible outcome values and their probabilities or odds \\
-\code{RV} & Create a random variable consisting of possible outcome values and their probabilities or odds \\
 \hline
 Manipulation \\ 
 \hline
@@ -76,13 +76,13 @@ Manipulation \\
 \hline
 Probabilities \\ 
 \hline
-\code{E} & Expected value of a random variable \\
-\code{KURT} & Kurtosis of a random variable \\
 \code{P} & Calculate probabilities of events \\
 \code{probs} & Probability mass function of random variable X \\
+\code{E} & Expected value of a random variable \\
+\code{V} & Variance of a random variable \\
 \code{SD} & Standard deviation of a random variable \\
 \code{SKEW} & Skewness of a random variable \\
-\code{V} & Variance of a random variable \\
+\code{KURT} & Kurtosis of a random variable \\
 \hline
 Methods \\
 \hline 
