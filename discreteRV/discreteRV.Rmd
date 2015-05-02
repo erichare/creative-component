@@ -35,9 +35,18 @@ output: rticles::rjournal_article
 
 One of the primary hurdles in teaching probability courses in an undergraduate setting is to bridge the gap between theoretical notation from textbooks and lectures, and the statements used in statistical software required in more and more classes. Depending on the background of the student, this missing link can manifest itself differently: some students master theoretical concepts and notation, but struggle with the computing environment, while others are very comfortable with statistical programming, but find it difficult to translate their knowledge back to the theoretical setting of the classroom.
 
-\pkg{discreteRV} is an approach to help with bringing software commands closer to the theoretical notation. The package provides a comprehensive set of functions to create, manipulate, and simulate from discrete random variables. It is designed for introductory probability courses. \pkg{discreteRV} uses syntax that closely matches the notation of standard probability textbooks to allow for a more seamless connection between a probability classroom setting and the use of statistical software. \pkg{discreteRV} is available for download on the Comprehensive R Archive Network (CRAN).
+\CRANpkg{discreteRV} \citep{m2} is an approach to help with bringing
+software commands closer to the theoretical notation. The package
+provides a comprehensive set of functions to create, manipulate, and
+simulate from discrete random variables. It is designed for
+introductory probability courses.  \pkg{discreteRV} uses syntax that
+closely matches the notation of standard probability textbooks to
+allow for a more seamless connection between a probability classroom
+setting and the use of statistical software. \pkg{discreteRV} is
+available for download on the Comprehensive R Archive Network (CRAN). \pkg{discreteRV} was derived from a script written by Dr. Andreas Buja for an introductory statistics class \citep{m4}. The package \pkg{rv2} \citep{m3}, available on GitHub, provides a useful example of using \pkg{devtools} \citep{m5} to begin basic package development, and also uses Dr. Buja's code as a starting point. The goal of \pkg{rv2} seems more focused on learning package development, while the goal of \pkg{discreteRV} is to be a useful statistics education and probability learning tool.
 
-The functions of \pkg{discreteRV} are organized into two logical areas, termed probabilities and simulations.
+The functions of \pkg{discreteRV} are organized into two logical
+areas, termed probabilities and simulations.
 
 \section{Probabilities}
 
@@ -125,7 +134,7 @@ Defaults are chosen to simplify the random variable creation process. For instan
 (X <- RV(1:6))
 ```
 
-Outcomes can be specified as a range of values, which is useful for distributions in which the outcomes that can occur with non-zero probability are unbounded. This can be indicated with the \code{range} argument, which defaults to TRUE in the event that the range of values includes positive or negative infinity. To define our poisson random variable Y, we specify the outcomes as a range and the probabilities as a function:
+Outcomes can be specified as a range of values, which is useful for distributions in which the outcomes that can occur with non-zero probability are unbounded. This can be indicated with the \code{range} argument, which defaults to TRUE in the event that the range of values includes positive or negative infinity. To define our Poisson random variable Y, we specify the outcomes as a range and the probabilities as a function:
 
 ```{r makeRVpois}
 pois.func <- function(y, lambda) { return(lambda^y * exp(-lambda) / factorial(y)) }
@@ -162,8 +171,7 @@ discreteRV & Casella and Berger \\
 \code{P((X < x1) \%OR\% (X > x2))} & $P(X < x_1 \cup X > x_2)$ \\
 \code{P((X == x1) | (X > x2))} & $P(X < x_1 | X > x_2)$ \\
 \code{probs(X)} & $f(x)$ \\
-\code{SD(X)} & $sd(X)$ \\
-\code{V(X)} & $var(X)$ \\
+\code{V(X)} & $Var(X)$ \\
 \end{tabular}}
 \caption{\label{tbl:discreteRV-connect} Probability functions in \pkg{discreteRV} and their corresponding syntax in introductory statistics courses.}
 \end{table}
@@ -193,7 +201,7 @@ P((Y - lambda)^2 <= delta^2)
 
 Conditional probabilities often provide a massive hurdle for students of introductory probability classes. These type of questions often make it necessary to first translate the problem from everyday language into the mathematical concept of conditional probability, e.g., what is the probability that you will not need an umbrella when the weather forecast said it was not going to rain? Similarly, what is the probability that a die shows a one, if we already know that the roll is no more than 3? The mathematical solution is, of course, $P(X=1 \mid X \le 3)$. In \pkg{discreteRV} this translates directly to a solution of \code{P(X == 1 | X <= 3)}. The use of the pipe operator may be less intuitive to the seasoned R programmer, but overcomes a major notational issue in that conditional probabilities are most commonly specified with the pipe. Using the pipe for conditional probablity, we had to create alternative \code{\%OR\%} and \code{\%AND\%} operators, as specified previously.
 
-We can compute several other distributional quantities, including the expected value and the variance of a random variable. In notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}. The expected value for a poisson random variable is its mean, and hence \code{E(Y)} in our example will return the value two. The function \code{V(X)} computes the variance of  random variable X. Alternatively, we can also work from first principles and assure ourselves that the expression \code{E((X-E(X))\^{ }2)} provides the same result:
+We can compute several other distributional quantities, including the expected value and the variance of a random variable. In notation from probability courses, expected values can be found with the \code{E} function. To compute the expected value for a single roll of a fair die, we run the code \code{E(X)}. The expected value for a Poisson random variable is its mean, and hence \code{E(Y)} in our example will return the value two. The function \code{V(X)} computes the variance of  random variable X. Alternatively, we can also work from first principles and assure ourselves that the expression \code{E((X-E(X))\^{ }2)} provides the same result:
 ```{r variance}
 V(X)
 E( (X-E(X))^2 )
@@ -224,7 +232,7 @@ Z <- RV(0:1)
 X * Z
 ```
 
-Note that we the behavior is slightly different when using the \code{*} operator on the same random variable. That is, \code{X * X} will not compute a joint distribution of two realizations of $X$, but will rather return the random variable with the original outcomes squared, and the same probabilities. This allows us to perform computations such as \code{E(X\^{ }2)} without encountering unexpected behavior.
+Note that the behavior is slightly different when using the \code{*} operator on the same random variable. That is, \code{X * X} will not compute a joint distribution of two realizations of $X$, but will rather return the random variable with the original outcomes squared, and the same probabilities. This allows us to perform computations such as \code{E(X\^{ }2)} without encountering unexpected behavior.
 
 Joint distributions need not be the product of iid random variables. Joint distributions in which the marginal distributions are dependent can also be defined. Consider the probability distribution defined in Table \ref{tbl:jointtable}. Note that A and B are dependent, as the product of the marginal distributions does not equal the joint. We can define such a random variable in \pkg{discreteRV} by using the \code{jointRV} function, which is a wrapper for \code{RV}:
 
@@ -246,7 +254,7 @@ A <- marginal(AandB, 1)
 B <- marginal(AandB, 2)
 ```
 
-Although the marginal distributions allow all the same computations of any univariate random variable, they maintain a special property. The joint distribution that produced the marginals are stored as attributes in the object. This allows for several more advanced probability calculations, involving the marginal and conditional distributions:
+Although the marginal distributions allow all the same computations of any univariate random variable, they maintain a special property. The joint distribution that produced the marginals is stored as attributes in the object. This allows for several more advanced probability calculations, involving the marginal and conditional distributions:
 
 ```{r coolstuff}
 P(A < B)
@@ -333,13 +341,13 @@ Name & Description \\
 \end{table}
 
 \subsection{Creation}
-Creating a simulated random vector is done by using the \code{rsim} function. \code{rsim} accepts a parameter X representing the random variable with which to simulate from, and a parameter n representing the number of independent trials to simulate. For example, suppose we'd like to simulate ten trials from a fair die. We have already created a random variable object X, so we simply call rsim as follows:
+Creating a simulated random vector is done by using the \code{rsim} function. \code{rsim} accepts a parameter X representing the random variable to simulate from, and a parameter n representing the number of independent trials to simulate. For example, suppose we'd like to simulate ten trials from a fair die. We have already created a random variable object X, so we simply call rsim as follows:
 
 ```{r rsim}
 (X.sim <- rsim(X, 10))
 ```
 
-The object returned is a vector of simulated values, with a class attribute containing the random variable that was used for the simulation. If we would like to retrieve only the simulated values and exclude the attached probabilities, we can coerce the object into a vector using R's built-in \code{as.vector} function.
+The object returned is a vector of simulated values, with an attribute containing the random variable that was used for the simulation. If we would like to retrieve only the simulated values and exclude the attached probabilities, we can coerce the object into a vector using R's built-in \code{as.vector} function.
 
 ```{r asvector}
 as.vector(X.sim)
@@ -386,7 +394,12 @@ Second <- marginal(TwoRolls, 2)
 P(First %in% c(7, 11) %OR% (First %in% 4:10 %AND% (First == Second)))
 ```
 
-Finally, suppose we are interested in the empirical probability of winning a game of Craps. Using the simulation functions in \pkg{discreteRV}, we can write a routine  to simulate playing Craps. Using the \code{rsim} function, we simulate a single game of Craps by rolling from our random variable \code{roll}, which represents the sum of two dice. We simulate 100 games, and then perform this simulation 1000 times. The results indicate that the player wins a game of craps approximately 49% of the time.
+Finally, suppose we are interested in the empirical probability of
+winning a game of Craps. Using the simulation functions in
+\pkg{discreteRV}, we can write a routine to simulate playing Craps.
+Using the \code{rsim} function, we simulate a single game of Craps by
+rolling from our random variable \code{Roll}, which represents the sum
+of two dice. We then perform this simulation 100000 times. The results indicate that the player wins a game of craps approximately 49\% of the time.
 
 ```{r craps5}
 craps_game <- function(RV) {
