@@ -361,7 +361,7 @@ Prop(X.sim == 3)
 Prop(X.sim > 3)
 ```
 
-\section{Extended example: playing craps}
+\section{Extended example: playing Craps}
 Craps is a common dice game played in casinos. The game begins with what is called the "Come Out" roll, in which two fair dice are rolled. If a sum of seven or eleven is obtained, the player wins. If a sum of two, three, or twelve is obtained, the player loses. In all other cases, the roll obtained is declared the ``Point" and the player rolls again in an attempt to obtain this same point value. If the player rolls the Point, they win, but if they roll a seven, they lose. Rolls continue until one of these two outcomes is achieved.
 
 \pkg{discreteRV} allows for a seamless analysis and simulation of the probabilities associated with different events in Craps. Let us begin by asking "What is the probability that the game ends after the first roll?" To answer this question we construct two random variables. We note that calling \code{RV(1:6)} returns a random variable for a single roll of a fair die, and then we use the overloaded \code{+} operator to sum over two rolls to obtain the random variable \code{Roll}.
