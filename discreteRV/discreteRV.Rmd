@@ -46,7 +46,7 @@ setting and the use of statistical software. \pkg{discreteRV} is
 available for download on the Comprehensive R Archive Network (CRAN). \pkg{discreteRV} was derived from a script written by Dr. Andreas Buja for an introductory statistics class \citep{m4}. The package \pkg{rv2} \citep{m3}, available on GitHub, provides a useful example of using \CRANpkg{devtools} \citep{m5} to begin basic package development, and also uses Dr. Buja's code as a starting point. The goal of \pkg{rv2} seems more focused on learning package development, while the goal of \pkg{discreteRV} is to be a useful statistics education and probability learning tool.
 
 The functions of \pkg{discreteRV} are organized into two logical
-areas, termed probabilities and simulations.
+areas, termed probabilities and simulations. This document will illustrate the use of both sets of functions. All code used in this document is available in a vignette, accessible by loading \pkg{discreteRV} and calling \code{vignette("discreteRV")}.
 
 \section{Probabilities}
 
